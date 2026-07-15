@@ -72,13 +72,14 @@
 				local skills = _entity.getSkills();
 				if (skills != null)
 				{
-					local showTree = skills.hasSkill("perk.aura_routing") || _entity.getLevel() >= ::AuraRouting.Tunables.LevelRequired;
+					local showTree = _entity!=null && !_entity.getSkills().hasSkill("background.hackflows_druid");
 					if (showTree)
 					{
 						::AuraRouting.Mod.Debug.printLog("[AuraRouting] convertEntityToUIData injecting aura_routing_perkTree for " + _entity.getName());
 						local perks = ::Const.Perks.Perks.map(@(row) clone row);
 						local p = ::new("scripts/skills/perks/aura_routing_perk");
 						p.aura_routing_locked <- _entity.getLevel() < ::AuraRouting.Tunables.LevelRequired;
+						// NOTES hard coded to have the perk in row 4 (index 3) of the perk tree, as this is where the Druid mod places its perks. This is a temporary solution until a better system is implemented.
 						perks[4].push(p);
 						result.aura_routing_perkTree <- perks;
 					}

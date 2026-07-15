@@ -2,14 +2,13 @@ this.aura_routing_perk <- this.inherit("scripts/skills/skill", {
 	function create()
 	{
 		this.m.ID = "perk.aura_routing";
-		this.m.Name = "Aura Routing";
-		this.m.Description = "Unlocks the Aura Routing active skill.";
-		this.m.Icon = "ui/aura/aura_pulse.png";
-		this.m.Type = this.Const.SkillType.Perk;
-		this.m.Order = this.Const.SkillOrder.Perk;
-		this.m.IsActive = false;
-		this.m.IsSerialized = true;
-		this.m.IsStacking = false;
+		local perk = ::Const.Perks.LookupMap[this.m.ID];
+        this.m.Name = perk.Name;
+        this.m.Icon = perk.Icon;
+        this.m.IconDisabled = perk.IconDisabled;
+
+        this.m.Type = ::Const.SkillType.Perk | ::Const.SkillType.StatusEffect;
+        this.m.Order = ::Const.SkillOrder.Perk;
 	},
 
 	function onAdded()
