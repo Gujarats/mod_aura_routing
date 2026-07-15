@@ -1,0 +1,10 @@
+{
+  "name": "Aura Routing",
+  "version": "1.0.0",
+  "author": "Copilot",
+  "description": "A standalone mod focused entirely on aura routing skills.",
+  "dependencies": [
+    "mod_msu",
+    "mod_modern_hooks"
+  ]
+}
