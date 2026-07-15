@@ -7,6 +7,9 @@ An active ability and perk modification for **Battle Brothers**, built using the
 
 This mod introduces a terrifying, high-tier ability that allows an elite character to completely shatter the morale of surrounding enemies, forcing them into an immediate rout once per battle.
 
+## icon
+source  image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp 
+
 ## 🚀 Features
 
 * **Custom Active Skill ("Aura Supreme"):** Forces all enemies within a specified tile radius to instantly fail their morale checks and transition into the **Fleeing** state.
