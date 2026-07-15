@@ -1,14 +1,17 @@
+//create perk that grants the aura routing active skill when added to a character
 this.aura_routing_perk <- this.inherit("scripts/skills/skill", {
+	m = {}
 	function create()
 	{
 		this.m.ID = "perk.aura_routing";
 		local perk = ::Const.Perks.LookupMap[this.m.ID];
         this.m.Name = perk.Name;
+        this.m.Description = perk.Tooltip;
         this.m.Icon = perk.Icon;
         this.m.IconDisabled = perk.IconDisabled;
 
-        this.m.Type = ::Const.SkillType.Perk | ::Const.SkillType.StatusEffect;
-        this.m.Order = ::Const.SkillOrder.Perk;
+        this.m.Type = this.Const.SkillType.Perk;
+        this.m.Order = this.Const.SkillOrder.Perk;
 	},
 
 	function onAdded()

@@ -7,12 +7,12 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 
     function create()
     {
+        this.root_skill.create();
         this.m.ID = "actives.aura_routing";
         this.m.Name = "Aura Routing";
         this.m.Description = "Unleash a panic aura that forces nearby enemies into Fleeing.";
-        this.m.Icon = "ui/aura/aura_pulse.png";
-        this.m.IconDisabled = "ui/aura/aura_pulse_sw.png";
-        this.m.Overlay = "aura_pulse";
+        this.m.Icon = "aura/aura_pulse.png";
+        this.m.IconDisabled = "aura/aura_pulse_sw.png";
         this.m.SoundOnUse = [
             "sounds/combat/indomitable_01.wav"
         ];
