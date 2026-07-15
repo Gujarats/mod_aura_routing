@@ -13,25 +13,12 @@ this.aura_routing_skill <- ::inherit("scripts/skills/actives/root_skill", {
         this.m.Description = "Unleash a panic aura that forces nearby enemies into Fleeing.";
         this.m.Icon = "aura/aura_supreme_perk.png";
         this.m.IconDisabled = "aura/aura_supreme_perk_sw.png";
-        // this.m.SoundOnUse = [
-        //     "sounds/combat/indomitable_01.wav"
-        // ];
-        // this.m.Type = this.Const.SkillType.Active;
-        // this.m.Order = this.Const.SkillOrder.OffensiveTargeted + 220;
-        // this.m.IsActive = true;
-        // this.m.IsTargeted = false;
-        // this.m.IsAttack = false;
-        // this.m.IsSerialized = true;
-        // this.m.IsStacking = false;
-        // this.m.IsIgnoredAsAOO = true;
-        // this.m.IsUsingHitchance = false;
-        // this.m.ActionPointCost = 3;
-        // this.m.FatigueCost = 20;
-        // this.m.MinRange = 0;
-        // this.m.MaxRange = 0;
-        // this.m.Radius = this.getConfiguredRadius();
-        // this.m.MaxCharges = this.getConfiguredCharges();
-        // this.m.Charges = this.m.MaxCharges;
+        this.m.SoundOnUse = [
+            "sounds/combat/indomitable_01.wav"
+        ];
+        this.m.Radius = this.getConfiguredRadius();
+        this.m.MaxCharges = this.getConfiguredCharges();
+        this.m.Charges = this.m.MaxCharges;
     }
 
     function getConfiguredRadius()
