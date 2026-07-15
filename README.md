@@ -21,33 +21,13 @@ Through the **Mod Settings** menu, you can dynamically configure the following p
 2. **Once Per Battle Restriction:** Toggle whether the ability can only be cast a single time per combat encounter, or used continuously (Default: Enabled).
 3. **Aura Effect Radius:** Dynamically scale the area of effect from 1 to 3 tiles out from the caster (Default: 3 Tiles).
 
-## 📁 Repository & Folder Structure
-
-The project code maintains a strict separation of concerns, separating early game engine initialization from runtime combat logic loops:
-source image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp 
-
-```text
-├── gfx/
-│   ├── skills/
-│   │   ├── aura_supreme_icon.png        # 64x64 Active Skill Icon
-│   │   └── aura_supreme_icon_sw.png     # 64x64 Grayscale (Disabled) Icon
-│   └── ui/
-│       └── perks/
-│           ├── aura_supreme_perk.png    # 44x44 Perk Tree Icon
-│           └── aura_supreme_perk_sw.png # 44x44 Grayscale (Disabled) Perk Icon
-├── scripts/
-│   └── !mods_preload/
-│       └── mod_aura_supreme_loader.nut  # Handles MSU initialization & UI layouts
-├── mod_aura_supreme_logic.nut           # Hooks into tactical actors & injection logic
-└── mod_aura_supreme_skill.nut           # Core active skill behavior & mechanics
-```
 
 # 🛠️ Requirements
 To run this mod, ensure you have the following frameworks installed in your game data directory:
 
-Modern Hooks
+ - Modern Hooks
 
-Modding Standards & Utilities (MSU) >= 1.9.0
+ - Modding Standards & Utilities (MSU) >= 1.9.0
 
 # 💻 Installation
 Download the latest release .zip file.
