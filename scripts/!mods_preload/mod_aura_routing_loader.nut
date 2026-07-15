@@ -13,14 +13,13 @@
 
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
-::include("mod_aura_routing_settings");
 
 ::AuraRouting.HookMod.queue(">mod_msu", function()
 {
 	::AuraRouting.Mod <- ::MSU.Class.Mod(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 	::AuraRouting.registerSettings();
+	::AuraRouting.Mod.Debug.enable()
 	::AuraRouting.Mod.Debug.printLog("[AuraRouting] settings initialized for Aura Routing mod completed");
-	::Hooks.registerJS("ui/mods/aura_routing.js");
 
 	local mod = ::AuraRouting.HookMod;
 	mod.hook("scripts/entity/tactical/actor", function(q)
@@ -52,12 +51,17 @@
 			local ret = __original();
 			local actor = this.getActor();
 			if (actor != null)
+			{
 				::AuraRouting.Mod.Debug.printLog("[AuraRouting] skill_container.update hook fired for " + actor.getName());
-			::AuraRouting.grantPerkIfEligible(actor);
+				::AuraRouting.grantPerkIfEligible(actor);
+			}
+
 			return ret;
 		}
 	});
 
+ 	::Hooks.registerJS("ui/mods/aura_routing.js");
+	::Hooks.registerCSS("ui/mods/aura_routing.css");
 	mod.hook("scripts/ui/global/data_helper", function(q)
 	{
 		q.convertEntityToUIData = @(__original) function(_entity, _activeEntity)
@@ -75,7 +79,7 @@
 						local perks = ::Const.Perks.Perks.map(@(row) clone row);
 						local p = ::new("scripts/skills/perks/aura_routing_perk");
 						p.aura_routing_locked <- _entity.getLevel() < ::AuraRouting.Tunables.LevelRequired;
-						perks[3].push(p);
+						perks[4].push(p);
 						result.aura_routing_perkTree <- perks;
 					}
 				}
@@ -92,10 +96,14 @@
 	try
 	{
 		if (!("getSkills" in _actor)) return;
+		::AuraRouting.Mod.Debug.printLog("[AuraRouting] getSkills is available for " + _actor.getName());
 		local skills = _actor.getSkills();
 		if (skills == null) return;
+		::AuraRouting.Mod.Debug.printLog("[AuraRouting] getSkills not null for " + _actor.getName());
 		if (_actor.getLevel() < ::AuraRouting.Tunables.LevelRequired) return;
+		::AuraRouting.Mod.Debug.printLog("[AuraRouting] Level is sufficient for " + _actor.getName());
 		if (skills.hasSkill("perk.aura_routing")) return;
+		::AuraRouting.Mod.Debug.printLog("[AuraRouting] No existing aura_routing perk for " + _actor.getName());
 
 		::AuraRouting.Mod.Debug.printLog("[AuraRouting] Granting perk to " + _actor.getName() + " at level " + _actor.getLevel());
 		skills.add(::new("scripts/skills/perks/perk_aura_routing"));

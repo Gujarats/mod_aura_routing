@@ -2,11 +2,11 @@
 {
 	local page = ::AuraRouting.Mod.ModSettings.addPage("General");
 
-	local debugLogSetting = page.addBooleanSetting("EnableDebugLogs", false, "Enable Debug Logs", "Toggle Aura Routing debug output in the console.");
-	debugLogSetting.addCallback(function(_data = null){
-		::AuraRouting.Mod.Debug.setFlag("default", this.getValue());
-	});
-	::AuraRouting.Mod.Debug.setFlag("default", debugLogSetting.getValue());
+	// local debugLogSetting = page.addBooleanSetting("EnableDebugLogs", false, "Enable Debug Logs", "Toggle Aura Routing debug output in the console.");
+	// debugLogSetting.addCallback(function(_data = null){
+	// 	::AuraRouting.Mod.Debug.setFlag("default", this.getValue());
+	// });
+	// ::AuraRouting.Mod.Debug.setFlag("default", debugLogSetting.getValue());
 
 	local sRadius = page.addRangeSetting("Radius", ::AuraRouting.Tunables.Radius, 1, 3, 1, "Routing Radius", "How many tiles the aura reaches.");
 	sRadius.addAfterChangeCallback(function(_oldValue) {
