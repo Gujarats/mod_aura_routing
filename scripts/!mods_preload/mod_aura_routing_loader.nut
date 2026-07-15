@@ -77,26 +77,13 @@
 					{
 						::AuraRouting.Mod.Debug.printLog("[AuraRouting] convertEntityToUIData injecting aura_routing_perkTree for " + _entity.getName());
 						local perks = ::Const.Perks.Perks.map(@(row) clone row);
-						local p = ::new("scripts/skills/perks/aura_routing_perk");
-						p.aura_routing_locked <- _entity.getLevel() < ::AuraRouting.Tunables.LevelRequired;
-						// NOTES hard coded to have the perk in row 4 (index 3) of the perk tree, as this is where the Druid mod places its perks. This is a temporary solution until a better system is implemented.
-						perks[4].push(p);
+						foreach (perk in ::Const.Perks.Aura) {
+							local p = clone perk;
+							delete p.verifyPrerequisites;
+							p.druid_blocked <- false;
+							perks[perk.Row].push(p);
+						}
 						result.aura_routing_perkTree <- perks;
-						::AuraRouting.Mod.Debug.printLog("[AuraRouting] : perks = " + perks);
-						::AuraRouting.Mod.Debug.printLog("[AuraRouting] : result = " + result.aura_routing_perkTree);
-						// Debugging the Perks Array
-						::AuraRouting.Mod.Debug.printLog("[AuraRouting] Checking Perks Array Structure:");
-						foreach (idx, row in perks) {
-							::AuraRouting.Mod.Debug.printLog(" - Row " + idx + " has " + row.len() + " elements.");
-						}
-
-						// Debugging your new perk object 'p'
-						if (p != null) {
-							::AuraRouting.Mod.Debug.printLog("[AuraRouting] Perk ID: " + p.m.ID);
-							::AuraRouting.Mod.Debug.printLog("[AuraRouting] Perk Icon Path: " + (("Icon" in p.m) ? p.m.Icon : "MISSING"));
-						} else {
-							::AuraRouting.Mod.Debug.printLog("[AuraRouting] ERROR: Perk 'p' is null!");
-						}
 					}
 				}
 			}

@@ -19,5 +19,5 @@ addPerk({
     Tooltip = "Unlocks the Aura Routing active skill."
     Icon = "aura/aura_pulse.png"
     IconDisabled = "aura/aura_pulse_sw.png"
-    Row = 1
+    Row = 4
 })
