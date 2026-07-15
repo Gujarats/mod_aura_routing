@@ -1,4 +1,4 @@
-this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
+this.aura_routing_skill <- ::inherit("scripts/skills/actives/root_skill", {
     m = {
         Charges = 0,
         MaxCharges = 0,
@@ -13,25 +13,25 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         this.m.Description = "Unleash a panic aura that forces nearby enemies into Fleeing.";
         this.m.Icon = "aura/aura_supreme_perk.png";
         this.m.IconDisabled = "aura/aura_supreme_perk_sw.png";
-        this.m.SoundOnUse = [
-            "sounds/combat/indomitable_01.wav"
-        ];
-        this.m.Type = this.Const.SkillType.Active;
-        this.m.Order = this.Const.SkillOrder.OffensiveTargeted + 220;
-        this.m.IsActive = true;
-        this.m.IsTargeted = false;
-        this.m.IsAttack = false;
-        this.m.IsSerialized = true;
-        this.m.IsStacking = false;
-        this.m.IsIgnoredAsAOO = true;
-        this.m.IsUsingHitchance = false;
-        this.m.ActionPointCost = 3;
-        this.m.FatigueCost = 20;
-        this.m.MinRange = 0;
-        this.m.MaxRange = 0;
-        this.m.Radius = this.getConfiguredRadius();
-        this.m.MaxCharges = this.getConfiguredCharges();
-        this.m.Charges = this.m.MaxCharges;
+        // this.m.SoundOnUse = [
+        //     "sounds/combat/indomitable_01.wav"
+        // ];
+        // this.m.Type = this.Const.SkillType.Active;
+        // this.m.Order = this.Const.SkillOrder.OffensiveTargeted + 220;
+        // this.m.IsActive = true;
+        // this.m.IsTargeted = false;
+        // this.m.IsAttack = false;
+        // this.m.IsSerialized = true;
+        // this.m.IsStacking = false;
+        // this.m.IsIgnoredAsAOO = true;
+        // this.m.IsUsingHitchance = false;
+        // this.m.ActionPointCost = 3;
+        // this.m.FatigueCost = 20;
+        // this.m.MinRange = 0;
+        // this.m.MaxRange = 0;
+        // this.m.Radius = this.getConfiguredRadius();
+        // this.m.MaxCharges = this.getConfiguredCharges();
+        // this.m.Charges = this.m.MaxCharges;
     }
 
     function getConfiguredRadius()
@@ -56,6 +56,16 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         return 1;
     }
 
+    function log(_message)
+    {
+        try
+        {
+            if ("AuraRouting" in ::getroottable() && ::AuraRouting != null && "Mod" in ::AuraRouting && "Debug" in ::AuraRouting.Mod)
+                ::AuraRouting.Mod.Debug.printLog("[AuraRouting] " + _message);
+        }
+        catch (e) {}
+    }
+
     function getTooltip()
     {
         local ret = this.getDefaultUtilityTooltip();
@@ -74,14 +84,9 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 
     function isUsable()
     {
-        if (!this.skill.isUsable()) return false;
+        if (!this.root_skill.isUsable()) return false;
         if (this.m.Charges <= 0) return false;
         return true;
-    }
-
-    function isHidden()
-    {
-        return this.m.Charges <= 0;
     }
 
     function onCombatStarted()
@@ -89,10 +94,12 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         this.m.Radius = this.getConfiguredRadius();
         this.m.MaxCharges = this.getConfiguredCharges();
         this.m.Charges = this.m.MaxCharges;
+        this.log("onCombatStarted(): reset charges=" + this.m.Charges + ", radius=" + this.m.Radius);
     }
 
     function onUse( _user, _targetTile )
     {
+        this.log("onUse(): user=" + (_user != null ? _user.getName() : "null") + ", charges=" + this.m.Charges + ", radius=" + this.m.Radius);
         local userTile = _user.getTile();
         if (userTile == null) return false;
 
@@ -117,6 +124,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
             catch (e) {}
         }
 
+        this.log("onUse(): completed use, remaining charges=" + this.m.Charges);
         return true;
     }
 
@@ -151,11 +159,13 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
             frontier = nextFrontier;
         }
 
+        this.log("getAffectedEnemies(): found " + affected.len() + " enemies within " + _radius + " radius");
         return affected;
     }
 
     function onCombatFinished()
     {
+        this.log("onCombatFinished(): resetting skill state");
         this.onCombatStarted();
     }
 });
