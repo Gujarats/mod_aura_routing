@@ -8,7 +8,7 @@ An active ability and perk modification for **Battle Brothers**, built using the
 This mod introduces a terrifying, high-tier ability that allows an elite character to completely shatter the morale of surrounding enemies, forcing them into an immediate rout once per battle.
 
 ## Special thanks to
- - [https://www.nexusmods.com/battlebrothers/mods/1061](Proper Druid)
+ - [Proper Druid](https://www.nexusmods.com/battlebrothers/mods/1061)
 
 ## icon
 source  image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp 
