@@ -1,4 +1,4 @@
-﻿::AuraRouting.RoutingSkill <- ::inherit("scripts/skills/skill", {
+this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
     m = {
         Charges = 0,
         MaxCharges = 0,

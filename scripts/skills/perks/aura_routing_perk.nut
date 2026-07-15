@@ -1,4 +1,4 @@
-this.perk_aura_routing <- this.inherit("scripts/skills/skill", {
+this.aura_routing_perk <- this.inherit("scripts/skills/skill", {
 	function create()
 	{
 		this.m.ID = "perk.aura_routing";

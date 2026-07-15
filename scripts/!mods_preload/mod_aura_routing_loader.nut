@@ -73,7 +73,7 @@
 					{
 						::AuraRouting.Mod.Debug.printLog("[AuraRouting] convertEntityToUIData injecting aura_routing_perkTree for " + _entity.getName());
 						local perks = ::Const.Perks.Perks.map(@(row) clone row);
-						local p = ::new("scripts/skills/perks/perk_aura_routing");
+						local p = ::new("scripts/skills/perks/aura_routing_perk");
 						p.aura_routing_locked <- _entity.getLevel() < ::AuraRouting.Tunables.LevelRequired;
 						perks[3].push(p);
 						result.aura_routing_perkTree <- perks;
