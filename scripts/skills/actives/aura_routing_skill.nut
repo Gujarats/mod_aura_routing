@@ -11,7 +11,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         this.m.Description = "Unleash a panic aura that forces up to 3 nearby enemies into Fleeing.";
         this.m.Icon = "aura/aura_routing_skill.png";
         this.m.IconDisabled = "aura/aura_routing_skill_sw.png";
-        this.m.Overlay = "active_06"; // Added overlay to support UI icons
+        this.m.Overlay = "active_118"; // TODO : need to create unique Overlay so it does not uses the vanilla icon
         this.m.SoundOnUse = ["sounds/combat/indomitable_01.wav"];
 
         this.m.Type = this.Const.SkillType.Active;
@@ -79,6 +79,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
                 local entity = tile.getEntity();
                 if (entity != null && entity.isAlive() && !entity.isAlliedWith(_user))
                 {
+                    this.attackEntity(_user, entity)
                     entity.setMoraleState(this.Const.MoraleState.Fleeing);
                 }
             }
