@@ -15,7 +15,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         this.m.SoundOnUse = ["sounds/combat/indomitable_01.wav"];
 
         this.m.Type = this.Const.SkillType.Active;
-        this.m.Order = this.Const.SkillOrder.OffensiveTargeted; // Updated order for targeting
+        this.m.Order = this.Const.SkillOrder.Offensive;
         this.m.IsSerialized = true;
         this.m.IsActive = true;
         this.m.IsTargeted = true;
