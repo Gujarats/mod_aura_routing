@@ -17,7 +17,7 @@ addPerk({
     Script = "scripts/skills/perks/aura_routing_perk"
     Name = "Aura Routing"
     Tooltip = "Unlocks the Aura Routing active skill."
-    Icon = "aura/aura_supreme_perk.png"
-    IconDisabled = "aura/aura_supreme_perk_sw.png"
+    Icon = "aura/aura_routing_perk.png"
+    IconDisabled = "aura/aura_routing_perk_sw.png"
     Row = 4
 })
