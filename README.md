@@ -6,6 +6,8 @@ This mod introduces a terrifying, high-tier ability that allows an elite charact
 
 ## Special thanks to
  - [Proper Druid](https://www.nexusmods.com/battlebrothers/mods/1061)
+ - [Legends](https://www.nexusmods.com/battlebrothers/mods/60)
+ - [Aura Power](https://www.nexusmods.com/battlebrothers/mods/1035)
 
 ## icon
 source  image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp 
