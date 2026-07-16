@@ -32,12 +32,41 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
     }
 
     // Add this helper to check if the move is valid (hits at least one enemy)
-    function isTargetingEnemy( _user, _targetTile )
+    // function isTargetingEnemy( _user, _targetTile )
+    // {
+    //     local ownTile = _user.getTile();
+    //     local dir = ownTile.getDirectionTo(_targetTile);
+    //     local tiles = [ _targetTile ];
+
+    //     for (local i = 1; i < 3; i++)
+    //     {
+    //         local nextDir = (dir - i) % this.Const.Direction.COUNT;
+    //         if (nextDir < 0) nextDir += this.Const.Direction.COUNT;
+    //         if (ownTile.hasNextTile(nextDir))
+    //             tiles.push(ownTile.getNextTile(nextDir));
+    //     }
+
+    //     foreach (tile in tiles)
+    //     {
+    //         if (tile.IsOccupiedByActor)
+    //         {
+    //             local entity = tile.getEntity();
+    //             // Return true as soon as we find one enemy
+    //             if (entity != null && entity.isAlive() && !entity.isAlliedWith(_user))
+    //                 return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    function onUse( _user, _targetTile )
     {
+        this.spawnAttackEffect(_targetTile, this.Const.Tactical.AttackEffectLash);
         local ownTile = _user.getTile();
         local dir = ownTile.getDirectionTo(_targetTile);
         local tiles = [ _targetTile ];
 
+        // 1. Rebuild the 3-tile arc list
         for (local i = 1; i < 3; i++)
         {
             local nextDir = (dir - i) % this.Const.Direction.COUNT;
@@ -46,40 +75,24 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
                 tiles.push(ownTile.getNextTile(nextDir));
         }
 
+        // 2. Safety check: Ensure at least one target is an enemy
+        local hasEnemy = false;
         foreach (tile in tiles)
         {
             if (tile.IsOccupiedByActor)
             {
                 local entity = tile.getEntity();
-                // Return true as soon as we find one enemy
                 if (entity != null && entity.isAlive() && !entity.isAlliedWith(_user))
-                    return true;
+                {
+                    hasEnemy = true;
+                    break;
+                }
             }
         }
-        return false;
-    }
 
-    // Modify onUse to perform this check
-    function onUse( _user, _targetTile )
-    {
-        // Forbid use if no enemies are targeted
-        if (!this.isTargetingEnemy(_user, _targetTile))
-        {
-            return false;
-        }
+        if (!hasEnemy) return false;
 
-        local ownTile = _user.getTile();
-        local dir = ownTile.getDirectionTo(_targetTile);
-        local tiles = [ _targetTile ];
-
-        for (local i = 1; i < 3; i++)
-        {
-            local nextDir = (dir - i) % this.Const.Direction.COUNT;
-            if (nextDir < 0) nextDir += this.Const.Direction.COUNT;
-            if (ownTile.hasNextTile(nextDir))
-                tiles.push(ownTile.getNextTile(nextDir));
-        }
-
+        // 3. Execution: Apply effect to all valid enemies in the arc[cite: 1, 2, 3]
         foreach (tile in tiles)
         {
             if (tile.IsOccupiedByActor)
@@ -95,6 +108,36 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         this.m.Charges = this.Math.max(0, this.m.Charges - 1);
         return true;
     }
+
+    function onTargetSelected( _targetTile )
+	{
+		local ownTile = this.m.Container.getActor().getTile();
+		local dir = ownTile.getDirectionTo(_targetTile);
+		this.Tactical.getHighlighter().addOverlayIcon(this.Const.Tactical.Settings.AreaOfEffectIcon, _targetTile, _targetTile.Pos.X, _targetTile.Pos.Y);
+		local nextDir = dir - 1 >= 0 ? dir - 1 : this.Const.Direction.COUNT - 1;
+
+		if (ownTile.hasNextTile(nextDir))
+		{
+			local nextTile = ownTile.getNextTile(nextDir);
+
+			if (this.Math.abs(nextTile.Level - ownTile.Level) <= 1)
+			{
+				this.Tactical.getHighlighter().addOverlayIcon(this.Const.Tactical.Settings.AreaOfEffectIcon, nextTile, nextTile.Pos.X, nextTile.Pos.Y);
+			}
+		}
+
+		nextDir = nextDir - 1 >= 0 ? nextDir - 1 : this.Const.Direction.COUNT - 1;
+
+		if (ownTile.hasNextTile(nextDir))
+		{
+			local nextTile = ownTile.getNextTile(nextDir);
+
+			if (this.Math.abs(nextTile.Level - ownTile.Level) <= 1)
+			{
+				this.Tactical.getHighlighter().addOverlayIcon(this.Const.Tactical.Settings.AreaOfEffectIcon, nextTile, nextTile.Pos.X, nextTile.Pos.Y);
+			}
+		}
+	}
 
     // Retained helper functions[cite: 1]
     function getConfiguredCharges() { return 1; }
