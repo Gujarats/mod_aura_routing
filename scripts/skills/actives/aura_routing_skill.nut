@@ -118,6 +118,48 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		}
 	}
 
+    function getTooltip()
+	{
+		// local ret = this.getDefaultTooltip();
+        local ret = [
+			{
+				id = 1,
+				type = "title",
+				text = this.getName()
+			},
+			{
+				id = 2,
+				type = "description",
+				text = this.getDescription()
+			},
+			{
+				id = 3,
+				type = "text",
+				text = this.getCostString()
+			},
+            {
+                id = 4,
+                type = "text",
+                icon = "ui/icons/uses.png",
+                text = "Uses remaining: " + this.m.Charges + "/" + this.m.MaxCharges
+            },
+            {
+                id = 5,
+                type = "text",
+                icon = "ui/icons/special.png",
+                text = "Can hit up to 3 targets"
+            },
+            {
+                id = 6,
+                type = "text",
+                icon = "ui/icons/hitchance.png",
+                text = "Has 100% chance to hit"
+            }
+		];
+
+		return ret;
+	}
+
     // Retained helper functions[cite: 1]
     function onCombatStarted() { this.m.Charges = ::AuraRouting.Mod.ModSettings.getSetting("UsesPerBattle").getValue(); }
     function onCombatFinished() { this.onCombatStarted(); }
