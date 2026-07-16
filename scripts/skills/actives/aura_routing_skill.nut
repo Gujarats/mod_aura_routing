@@ -118,6 +118,13 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		}
 	}
 
+    // we can use hit chance to make this skill not overpowered,
+    // or find a way to make this skill usage once per batlle regardless who uses first.
+    function isUsingHitchance()
+    {
+        return false;
+    }
+
     function getTooltip()
 	{
 		// local ret = this.getDefaultTooltip();
