@@ -27,37 +27,16 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
         this.m.MinRange = 1;
         this.m.MaxRange = 1;
 
-        this.m.MaxCharges = this.getConfiguredCharges();
+        this.m.MaxCharges = ::AuraRouting.Mod.ModSettings.getSetting("UsesPerBattle").getValue();
         this.m.Charges = this.m.MaxCharges;
     }
 
-    // Add this helper to check if the move is valid (hits at least one enemy)
-    // function isTargetingEnemy( _user, _targetTile )
-    // {
-    //     local ownTile = _user.getTile();
-    //     local dir = ownTile.getDirectionTo(_targetTile);
-    //     local tiles = [ _targetTile ];
-
-    //     for (local i = 1; i < 3; i++)
-    //     {
-    //         local nextDir = (dir - i) % this.Const.Direction.COUNT;
-    //         if (nextDir < 0) nextDir += this.Const.Direction.COUNT;
-    //         if (ownTile.hasNextTile(nextDir))
-    //             tiles.push(ownTile.getNextTile(nextDir));
-    //     }
-
-    //     foreach (tile in tiles)
-    //     {
-    //         if (tile.IsOccupiedByActor)
-    //         {
-    //             local entity = tile.getEntity();
-    //             // Return true as soon as we find one enemy
-    //             if (entity != null && entity.isAlive() && !entity.isAlliedWith(_user))
-    //                 return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    function isUsable()
+    {
+        local isTrue = this.m.Charges > 0 && this.m.Container.getActor().getActionPoints() >= this.m.ActionPointCost;
+        ::AuraRouting.Mod.Debug.printLog("[AuraRouting] isTrue : " + isTrue + " | Charges: " + this.m.Charges + " | MaxCharges: " + this.m.MaxCharges + " | ActionPoints: " + this.m.Container.getActor().getActionPoints() + " | ActionPointCost: " + this.m.ActionPointCost);
+        return isTrue;
+    }
 
     function onUse( _user, _targetTile )
     {
@@ -140,7 +119,6 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 	}
 
     // Retained helper functions[cite: 1]
-    function getConfiguredCharges() { return 1; }
-    function onCombatStarted() { this.m.Charges = this.getConfiguredCharges(); }
+    function onCombatStarted() { this.m.Charges = ::AuraRouting.Mod.ModSettings.getSetting("UsesPerBattle").getValue(); }
     function onCombatFinished() { this.onCombatStarted(); }
 });
