@@ -33,6 +33,8 @@
 			if (_entity != null)
 			{
 				local skills = _entity.getSkills();
+				local settings = ::AuraRouting.Mod.ModSettings;
+				local sLevel = settings.getSetting("PerkLevel").getValue();
 				if (skills != null)
 				{
 					// NOTES hardcoded to check the mod "proper druid"
@@ -46,7 +48,7 @@
 							local p = clone perk;
 							delete p.verifyPrerequisites;
 							p.druid_blocked <- false;
-							perks[perk.Row].push(p);
+							perks[sLevel-1].push(p);
 						}
 						result.aura_routing_perkTree <- perks;
 						::AuraRouting.Mod.Debug.printLog("[AuraRouting] convertEntityToUIData injecting aura_routing_perkTree for " + _entity.getName());

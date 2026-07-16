@@ -2,33 +2,12 @@
 {
 	local page = ::AuraRouting.Mod.ModSettings.addPage("General");
 
-	// local debugLogSetting = page.addBooleanSetting("EnableDebugLogs", false, "Enable Debug Logs", "Toggle Aura Routing debug output in the console.");
-	// debugLogSetting.addCallback(function(_data = null){
-	// 	::AuraRouting.Mod.Debug.setFlag("default", this.getValue());
-	// });
-	// ::AuraRouting.Mod.Debug.setFlag("default", debugLogSetting.getValue());
+	local sLevel = page.addRangeSetting("PerkLevel", ::AuraRouting.Tunables.LevelRequired, 5, 1, 7, 1, "Unlock Level Perk, Decide which Perk row this skills is available. Need Restart!!!");
+    page.addRangeSetting(
+        "PerkLevel",
+        5, 1, 7, 1,
+        "Perk Unlocked which rows in the menu perks",
+        "NEED RESTART !!!"
+    );
 
-	local sRadius = page.addRangeSetting("Radius", ::AuraRouting.Tunables.Radius, 1, 3, 1, "Routing Radius", "How many tiles the aura reaches.");
-	sRadius.addAfterChangeCallback(function(_oldValue) {
-		::AuraRouting.Tunables.Radius = this.getValue();
-	});
-	::AuraRouting.Tunables.Radius = sRadius.getValue();
-
-	local sUses = page.addRangeSetting("UsesPerBattle", ::AuraRouting.Tunables.UsesPerBattle, 1, 3, 1, "Uses Per Battle", "How many times the routing aura can be used in one battle.");
-	sUses.addAfterChangeCallback(function(_oldValue) {
-		::AuraRouting.Tunables.UsesPerBattle = this.getValue();
-	});
-	::AuraRouting.Tunables.UsesPerBattle = sUses.getValue();
-
-	local sLevel = page.addRangeSetting("LevelRequired", ::AuraRouting.Tunables.LevelRequired, 1, 10, 1, "Unlock Level", "Minimum level required to receive the routing perk.");
-	sLevel.addAfterChangeCallback(function(_oldValue) {
-		::AuraRouting.Tunables.LevelRequired = this.getValue();
-	});
-	::AuraRouting.Tunables.LevelRequired = sLevel.getValue();
-
-	local sOnce = page.addBooleanSetting("IsOncePerBattle", ::AuraRouting.Tunables.IsOncePerBattle, "Once Per Battle", "If enabled, the user cannot take any further actions after using this skill.");
-	sOnce.addAfterChangeCallback(function(_oldValue) {
-		::AuraRouting.Tunables.IsOncePerBattle = this.getValue();
-	});
-	::AuraRouting.Tunables.IsOncePerBattle = sOnce.getValue();
 }
