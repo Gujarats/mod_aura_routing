@@ -4,13 +4,6 @@
 	Version = "1.0.0"
 };
 
-::AuraRouting.Tunables <- {
-	Radius = 3,
-	UsesPerBattle = 1,
-	LevelRequired = 7,
-	IsOncePerBattle = true
-};
-
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
 
