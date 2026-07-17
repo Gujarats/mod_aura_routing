@@ -21,7 +21,7 @@ class BrushBuildError(Exception):
 
 
 class BrushBuilder:
-    def __init__(self, build_dir="build", repo_dir="Legends-public"):
+    def __init__(self, build_dir="build", repo_dir=""):
         self.current_dir = Path.cwd()
 
         self.build_dir = build_dir
@@ -113,7 +113,7 @@ class BrushBuilder:
         #         )
         #     )
 
-        self.brush.build_brush_best_fit("aura_routing_effect")
+        self.brush.build_brush("aura_routing_effect")
         print("Elapsed build brush", time.time() - start)
 
     def build(self):
