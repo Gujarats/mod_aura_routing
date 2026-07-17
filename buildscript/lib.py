@@ -300,33 +300,33 @@ class BrushUtils:
 	"""Utility class for brush-related operations"""
 
 	def __init__(self, current_dir=None, repo_dir="battlebrothers"):
-		self.current_dir = Path(current_dir) if current_dir else Path.cwd()
+		self.current_dir = current_dir
 		self.repo_dir = repo_dir
 		self.bbrusher = BBrusher()
 
-	def get_helmet_brushes(self):
-		"""Get list of helmet brush directories"""
-		helmet_brushes = []
-		helmet_dir = self.current_dir / "unpacked" / "legend_helmets"
+	# def get_helmet_brushes(self):
+	# 	"""Get list of helmet brush directories"""
+	# 	helmet_brushes = []
+	# 	helmet_dir = self.current_dir / "unpacked" / "legend_helmets"
 
-		if helmet_dir.exists():
-			for subdir in helmet_dir.iterdir():
-				if subdir.is_dir() and subdir.name.isdigit():
-					helmet_brushes.append(f"legend_helmets/{subdir.name}")
+	# 	if helmet_dir.exists():
+	# 		for subdir in helmet_dir.iterdir():
+	# 			if subdir.is_dir() and subdir.name.isdigit():
+	# 				helmet_brushes.append(f"legend_helmets/{subdir.name}")
 
-		return helmet_brushes
+	# 	return helmet_brushes
 
-	def get_armor_brushes(self):
-		"""Get list of armor brush directories"""
-		armor_brushes = []
-		armor_dir = self.current_dir / "unpacked" / "legend_armor"
+	# def get_armor_brushes(self):
+	# 	"""Get list of armor brush directories"""
+	# 	armor_brushes = []
+	# 	armor_dir = self.current_dir / "unpacked" / "legend_armor"
 
-		if armor_dir.exists():
-			for subdir in armor_dir.iterdir():
-				if subdir.is_dir() and subdir.name.isdigit():
-					armor_brushes.append(f"legend_armor/{subdir.name}")
+	# 	if armor_dir.exists():
+	# 		for subdir in armor_dir.iterdir():
+	# 			if subdir.is_dir() and subdir.name.isdigit():
+	# 				armor_brushes.append(f"legend_armor/{subdir.name}")
 
-		return armor_brushes
+	# 	return armor_brushes
 
 	def build_brush(self, brush_path):
 		"""Build a single brush using bbrusher"""
@@ -335,7 +335,7 @@ class BrushUtils:
 		# Convert forward slashes to underscores for brush name
 		brush_name = brush_path.replace("/", "_")
 		brush_file = self.current_dir / "brushes" / f"{brush_name}.brush"
-		unpacked_dir = self.current_dir / "unpacked" / brush_path
+		unpacked_dir = self.current_dir / "unpacked_brushes" / brush_path
 
 		if not unpacked_dir.exists():
 			print(f"Warning: Unpacked directory {unpacked_dir} does not exist, skipping {brush_path}")
@@ -347,7 +347,7 @@ class BrushUtils:
 		# TODO :  try to call this in your own project
 		# it should be simple to call this just copy paste the buildscript and 
 		try:
-			self.bbrusher.pack_brush_from_dir(brush_file, unpacked_dir, f"../{self.repo_dir}")
+			self.bbrusher.pack_brush_from_dir(brush_file, unpacked_dir, f"{self.repo_dir}/gfx")
 		except Exception as e:
 			raise BuildError(f"Failed to build brush {brush_path}: {e}")
 
@@ -359,7 +359,7 @@ class BrushUtils:
 		# Convert forward slashes to underscores for brush name
 		brush_name = brush_path.replace("/", "_")
 		brush_file = self.current_dir / "brushes" / f"{brush_name}.brush"
-		unpacked_dir = self.current_dir / "unpacked" / brush_path
+		unpacked_dir = self.current_dir / "unpacked_brushes" / brush_path
 
 		if not unpacked_dir.exists():
 			print(f"Warning: Unpacked directory {unpacked_dir} does not exist, skipping {brush_path}")

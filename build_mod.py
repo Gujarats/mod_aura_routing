@@ -95,7 +95,7 @@ class ModBuilder:
     def build_brushes(self):
         """Build brushes using the brush builder"""
         from build_brushes import BrushBuilder
-        BrushBuilder(self.repo_dir).build()
+        BrushBuilder(self.build_dir,self.repo_dir).build()
 
     def _merge_directories(self, src_dir, dest_dir):
         """Merge source directory into destination, preserving existing content"""
@@ -131,9 +131,9 @@ class ModBuilder:
                     print("check file " + dir_name +" is exist ", Path(dir_name).exists())
                     if Path(dir_name).exists():
                         for root, dirs, files in os.walk(dir_name):
-                            print("adding files from", dirs.__str__())
+                            # print("adding files from", dirs.__str__())
                             for file in files:
-                                print(f"Adding {file} to {zip_name_mod} ...")
+                                # print(f"Adding {file} to {zip_name_mod} ...")
                                 file_path = Path(root) / file
                                 zf.write(file_path, file_path)
 
