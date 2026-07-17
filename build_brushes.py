@@ -117,7 +117,7 @@ class BrushBuilder:
         #         )
         #     )
 
-        self.brush.build_brush("aura_routing_effect")
+        self.brush.build_brush_best_fit("aura_routing_effect")
         print("Elapsed build brush", time.time() - start)
 
     def build(self):
