@@ -137,13 +137,6 @@ class ModBuilder:
                                 file_path = Path(root) / file
                                 zf.write(file_path, file_path)
 
-            # Remove scripts directory and recreate with just the assets script
-            if Path("scripts").exists():
-                shutil.rmtree("scripts")
-
-            scripts_dir = Path("scripts") / "!mods_preload"
-            scripts_dir.mkdir(parents=True)
-
             # Move zip files to BB directory
             shutil.move(zip_name_mod, self.bb_dir / zip_name_mod)
             print(f"Created {zip_name_mod} in {self.bb_dir}")
