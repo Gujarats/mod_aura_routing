@@ -19,11 +19,9 @@ class ModBuilder:
 
         # Use provided values, fall back to config, then to defaults
         if repo_dir is None:
-            repo_dir = config.REPO_DIR
+            repo_dir = Path.cwd()
         if build_dir is None:
-            build_dir = config.BUILD_DIR
-        if bb_dir is None:
-            bb_dir = config.BB_DIR
+            build_dir = repo_dir / "build"
 
         # Set default paths based on OS if still None
         if bb_dir is None:
@@ -83,18 +81,6 @@ class ModBuilder:
         except Exception as e:
             print(f"Warning: cleanup error {e}")
 
-
-#     def build_assets_script(self):
-#         """Build asset mod script dynamically"""
-#         assets_version = self.version_extractor.get_legends_assets_version()
-#         script_content = f"""::LegendsAssets <- {{
-#     ID = "mod_legends_assets",
-#     Version = "{assets_version}",
-#     Name = "Legends assets"
-# }};
-# ::mods_registerMod(::LegendsAssets.ID, ::LegendsAssets.Version, ::LegendsAssets.Name);"""
-#       return script_content
-
     def artifact_name_mod(self):
         """Generate mod artifact name"""
         # version = self.version_extractor.extract_version()
@@ -106,51 +92,10 @@ class ModBuilder:
         assets_version = self.version_extractor.get_legends_assets_version()
         return f"mod_legends-assets-{assets_version}.zip"
 
-    # def copy_dead_assets(self):
-    #     """Copy dead arrow and javelin assets"""
-    #     dead_arrows_src = self.current_dir / "unpacked" / "dead_arrows.png"
-    #     dead_javelin_src = self.current_dir / "unpacked" / "dead_javelin.png"
-    #     dest_dir = self.current_dir / "unpacked" / "legend_characters" / "entity" / "bodies"
-
-    #     dest_dir.mkdir(parents=True, exist_ok=True)
-
-    #     if dead_arrows_src.exists():
-    #         shutil.copy2(dead_arrows_src, dest_dir)
-    #     if dead_javelin_src.exists():
-    #         shutil.copy2(dead_javelin_src, dest_dir)
-
     def build_brushes(self):
         """Build brushes using the brush builder"""
         from build_brushes import BrushBuilder
-        BrushBuilder(str(self.build_dir), self.repo_dir).build()
-
-    def copy_directories(self):
-        """Copy required directories to build directory"""
-        directories = [
-            ("sounds", "sounds"),
-            ("gfx", "gfx"),
-            ("mod_legends", "mod_legends"),
-            ("scripts", "scripts"),
-            ("ui", "ui"),
-            ("preload", "preload"),
-        ]
-
-        for src_name, dest_name in directories:
-            src_dir = self.current_dir / src_name
-            dest_dir = self.build_dir / dest_name
-
-            if src_dir.exists():
-                print(f"Copying {src_name} to {dest_dir} ...")
-                if dest_dir.exists():
-                    # For scripts directory, merge instead of replace to preserve legend_armor/legend_helmets
-                    if dest_name == "scripts":
-                        # Copy with merge - preserve existing content
-                        self._merge_directories(src_dir, dest_dir)
-                    else:
-                        shutil.rmtree(dest_dir)
-                        shutil.copytree(src_dir, dest_dir)
-                else:
-                    shutil.copytree(src_dir, dest_dir)
+        BrushBuilder(self.repo_dir).build()
 
     def _merge_directories(self, src_dir, dest_dir):
         """Merge source directory into destination, preserving existing content"""
@@ -172,36 +117,25 @@ class ModBuilder:
 
         # Change to build directory
         original_cwd = os.getcwd()
-        os.chdir(self.build_dir)
+        print("self.repo_dir : " + str(self.repo_dir));
+        os.chdir(self.repo_dir)
 
         try:
             print("Creating zip archives...")
-            # zip_name_assets = self.artifact_name_assets()
             zip_name_mod = self.artifact_name_mod()
-
-            # Create assets zip
-            # with zipfile.ZipFile(zip_name_assets, "w", zipfile.ZIP_DEFLATED) as zf:
-            #     # Only walk through the specific directories we want to include
-            #     for dir_name in ["brushes", "gfx", "sounds", "preload"]:
-            #         if Path(dir_name).exists():
-            #             for root, dirs, files in os.walk(dir_name):
-            #                 for file in files:
-            #                     file_path = Path(root) / file
-            #                     zf.write(file_path, file_path)
 
             # Create mod zip
             print(f"Creating mod zip: {zip_name_mod}")
             with zipfile.ZipFile(zip_name_mod, "w", zipfile.ZIP_DEFLATED) as zf:
-                # Only walk through the specific directories we want to include
-                for dir_name in ["mod_legends", "scripts", "ui"]:
+                for dir_name in ["brushes", "gfx", "ui", "scripts"]:
+                    print("check file " + dir_name +" is exist ", Path(dir_name).exists())
                     if Path(dir_name).exists():
                         for root, dirs, files in os.walk(dir_name):
+                            print("adding files from", dirs.__str__())
                             for file in files:
+                                print(f"Adding {file} to {zip_name_mod} ...")
                                 file_path = Path(root) / file
                                 zf.write(file_path, file_path)
-
-            # Create assets script and add to assets zip
-            # assets_script_content = self.build_assets_script()
 
             # Remove scripts directory and recreate with just the assets script
             if Path("scripts").exists():
@@ -210,20 +144,8 @@ class ModBuilder:
             scripts_dir = Path("scripts") / "!mods_preload"
             scripts_dir.mkdir(parents=True)
 
-            # with open(scripts_dir / "mod_legends_assets.nut", "w") as f:
-            #     f.write(assets_script_content)
-
-            # Add scripts to assets zip
-            # with zipfile.ZipFile(zip_name_assets, "a", zipfile.ZIP_DEFLATED) as zf:
-            #     for root, dirs, files in os.walk("scripts"):
-            #         for file in files:
-            #             file_path = Path(root) / file
-            #             zf.write(file_path, file_path)
-
             # Move zip files to BB directory
-            # shutil.move(zip_name_assets, self.bb_dir / zip_name_assets)
             shutil.move(zip_name_mod, self.bb_dir / zip_name_mod)
-
             print(f"Created {zip_name_mod} in {self.bb_dir}")
 
         finally:
@@ -246,7 +168,7 @@ class ModBuilder:
             # self.copy_dead_assets()
 
             # Copy directories first (to establish base structure)
-            self.copy_directories()
+            # self.copy_directories()
 
             # Build brushes (which will add legend_armor/legend_helmets to existing scripts)
             self.build_brushes()
