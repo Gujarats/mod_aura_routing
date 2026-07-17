@@ -116,6 +116,8 @@ class BrushBuilder:
         #             ],
         #         )
         #     )
+
+        self.brush.build_brush("aura_routing_effect")
         print("Elapsed build brush", time.time() - start)
 
     def build(self):
@@ -124,15 +126,15 @@ class BrushBuilder:
             print("Starting brush build process...")
 
             # Build scripts first
-            self.build_helmets()
-            self.build_armor()
-            self.build_enemies()
+            # self.build_helmets()
+            # self.build_armor()
+            # self.build_enemies()
 
             # Build all brushes
             self.build_all_brushes()
 
             # Copy brushes and assets to build directory for packaging
-            self.copy_brushes_and_gfx()
+            # self.copy_brushes_and_gfx()
 
             print("Brush build completed successfully!")
 
@@ -146,7 +148,7 @@ class BrushBuilder:
 
 def main():
     """Main entry point"""
-    parser = argparse.ArgumentParser(description="Build brushes for Legends mod")
+    parser = argparse.ArgumentParser(description="Build brushes for Aura Routing mod")
     parser.add_argument(
         "build_dir", nargs="?", help="Build directory (default: ./build)"
     )

@@ -1,0 +1,3 @@
+<brush name="aura_routing_effect.png" version="17">
+  <sprite id="aura_routing_effect" rotSpeed="800" ic="FF56616C" width="56" height="56" img="effects\aura_routing_effect.png" left="-28" right="28" top="-28" bottom="28" />
+</brush>
