@@ -21,14 +21,10 @@ class BrushBuildError(Exception):
 
 
 class BrushBuilder:
-    def __init__(self, build_dir=None, repo_dir="Legends-public"):
+    def __init__(self, build_dir="build", repo_dir="Legends-public"):
         self.current_dir = Path.cwd()
 
-        # Set default build directory
-        if build_dir is None:
-            build_dir = self.current_dir / "build"
-
-        self.build_dir = Path(build_dir)
+        self.build_dir = build_dir
         self.repo_dir = repo_dir
         self.brush = BrushUtils(self.current_dir, self.repo_dir)
 
