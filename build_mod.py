@@ -176,32 +176,18 @@ class ModBuilder:
 
         try:
             print("Creating zip archives...")
-            # zip_name_assets = self.artifact_name_assets()
             zip_name_mod = self.artifact_name_mod()
-
-            # Create assets zip
-            # with zipfile.ZipFile(zip_name_assets, "w", zipfile.ZIP_DEFLATED) as zf:
-            #     # Only walk through the specific directories we want to include
-            #     for dir_name in ["brushes", "gfx", "sounds", "preload"]:
-            #         if Path(dir_name).exists():
-            #             for root, dirs, files in os.walk(dir_name):
-            #                 for file in files:
-            #                     file_path = Path(root) / file
-            #                     zf.write(file_path, file_path)
 
             # Create mod zip
             print(f"Creating mod zip: {zip_name_mod}")
             with zipfile.ZipFile(zip_name_mod, "w", zipfile.ZIP_DEFLATED) as zf:
                 # Only walk through the specific directories we want to include
-                for dir_name in ["mod_legends", "scripts", "ui"]:
+                for dir_name in ["brushes", "scripts", "ui", "gfx"]:
                     if Path(dir_name).exists():
                         for root, dirs, files in os.walk(dir_name):
                             for file in files:
                                 file_path = Path(root) / file
                                 zf.write(file_path, file_path)
-
-            # Create assets script and add to assets zip
-            # assets_script_content = self.build_assets_script()
 
             # Remove scripts directory and recreate with just the assets script
             if Path("scripts").exists():
@@ -210,18 +196,7 @@ class ModBuilder:
             scripts_dir = Path("scripts") / "!mods_preload"
             scripts_dir.mkdir(parents=True)
 
-            # with open(scripts_dir / "mod_legends_assets.nut", "w") as f:
-            #     f.write(assets_script_content)
-
-            # Add scripts to assets zip
-            # with zipfile.ZipFile(zip_name_assets, "a", zipfile.ZIP_DEFLATED) as zf:
-            #     for root, dirs, files in os.walk("scripts"):
-            #         for file in files:
-            #             file_path = Path(root) / file
-            #             zf.write(file_path, file_path)
-
             # Move zip files to BB directory
-            # shutil.move(zip_name_assets, self.bb_dir / zip_name_assets)
             shutil.move(zip_name_mod, self.bb_dir / zip_name_mod)
 
             print(f"Created {zip_name_mod} in {self.bb_dir}")
