@@ -347,7 +347,9 @@ class BrushUtils:
 		# TODO :  try to call this in your own project
 		# it should be simple to call this just copy paste the buildscript and 
 		try:
-			self.bbrusher.pack_brush_from_dir(brush_file, unpacked_dir, f"{self.repo_dir}/gfx")
+			# metadata.xml already stores the atlas path as "gfx/<name>.png".
+			# Pass the mod root, not its gfx subdirectory, to avoid gfx/gfx/<name>.png.
+			self.bbrusher.pack_brush_from_dir(brush_file, unpacked_dir, self.repo_dir)
 		except Exception as e:
 			raise BuildError(f"Failed to build brush {brush_path}: {e}")
 
