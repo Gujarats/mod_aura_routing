@@ -11,7 +11,7 @@
 {
 	::AuraRouting.Mod <- ::MSU.Class.Mod(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 	::AuraRouting.registerSettings();
-	::AuraRouting.Mod.Debug.enable() // TODO hard coded for now
+	::AuraRouting.Mod.Debug.disable() // TODO hard coded for now
 	::AuraRouting.Mod.Debug.printLog("[AuraRouting] settings initialized for Aura Routing mod completed");
 
 	local mod = ::AuraRouting.HookMod;
