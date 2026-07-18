@@ -71,6 +71,19 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 
         if (!hasEnemy) return false;
 
+        // Visual cue: a wide aura burst centred on the user.
+		try
+		{
+			if (this.doesBrushExist("aura_body_glow_v2"))
+			{
+                ::AuraRouting.Mod.Debug.printLog("[AuraRouting]: found brush : aura_body_glow_v2")
+				this.Tactical.spawnSpriteEffect("aura_body_glow_v2",
+					this.createColor("#e63f33"), ownTile,
+					0, 30, 1.4, 2.4, 100, 60, 400);
+			}
+		}
+		catch (e) {}
+
         // 3. Execution: Apply effect to all valid enemies in the arc[cite: 1, 2, 3]
         foreach (tile in tiles)
         {

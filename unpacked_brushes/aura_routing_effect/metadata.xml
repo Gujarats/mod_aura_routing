@@ -1,3 +1,4 @@
 <brush name="gfx/aura_routing_effect.png" version="17">
   <sprite id="aura_routing_effect" ic="FF493A7B" img="effects\aura_routing_effect.png" />
+  <sprite id="aura_body_glow_v2" ic="FFD9A845" img="effects\aura_body_glow_v2.png" />
 </brush>
