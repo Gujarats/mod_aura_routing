@@ -92,7 +92,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
                 local entity = tile.getEntity();
                 if (entity != null && entity.isAlive() && !entity.isAlliedWith(_user))
                 {
-                    this.attackEntity(_user, entity)
+                    this.Tactical.getShaker().shake(entity, _user.getTile(), 4);
                     entity.setMoraleState(this.Const.MoraleState.Fleeing);
                 }
             }
