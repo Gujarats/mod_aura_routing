@@ -44,3 +44,7 @@ Launch the game and look for Aura Supreme Mod inside your Mod Settings panel!
 
 # 📜 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+# Known Issue
+ - start the hit animation somehow cannot be trigger without attack/damaged, need to find a way to tigger damange animation with 0 damage
+ - overlay icon somehow does not look as good as the vanilla
