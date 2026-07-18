@@ -92,7 +92,8 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
                 local entity = tile.getEntity();
                 if (entity != null && entity.isAlive() && !entity.isAlliedWith(_user))
                 {
-                    this.attackEntity(_user, entity)
+                    this.spawnFearBurst(_user.getTile(), tile);
+                    this.Tactical.getShaker().shake(entity, _user.getTile(), 4);
                     entity.setMoraleState(this.Const.MoraleState.Fleeing);
                 }
             }
@@ -100,6 +101,81 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 
         this.m.Charges = this.Math.max(0, this.m.Charges - 1);
         return true;
+    }
+
+    function spawnFearBurst( _originTile, _targetTile )
+    {
+        if (!this.doesBrushExist("sand_dust_01"))
+        {
+            ::AuraRouting.Mod.Debug.printLog("[AuraRouting] Missing particle brush: sand_dust_01");
+            return;
+        }
+
+        local direction = _originTile.getDirectionTo(_targetTile);
+        local directionVectors = [
+            this.createVec(0.0, -1.0), this.createVec(0.85, -0.5),
+            this.createVec(0.85, 0.5), this.createVec(0.0, 1.0),
+            this.createVec(-0.85, 0.5), this.createVec(-0.85, -0.5)
+        ];
+        local burstDirection = directionVectors[direction];
+        local effect = {
+            Delay = 0,
+            Quantity = 16,
+            LifeTimeQuantity = 16,
+            SpawnRate = 400,
+            Brushes = ["sand_dust_01"],
+            Stages = [
+                {
+                    LifeTimeMin = 0.1,
+                    LifeTimeMax = 0.2,
+                    ColorMin = this.createColor("e65c1a00"),
+                    ColorMax = this.createColor("ffb34700"),
+                    ScaleMin = 0.5,
+                    ScaleMax = 0.75,
+                    RotationMin = 0,
+                    RotationMax = 359,
+                    VelocityMin = 70,
+                    VelocityMax = 115,
+                    DirectionMin = burstDirection,
+                    DirectionMax = burstDirection,
+                    SpawnOffsetMin = this.createVec(-25, -15),
+                    SpawnOffsetMax = this.createVec(25, 20)
+                },
+                {
+                    LifeTimeMin = 0.75,
+                    LifeTimeMax = 1.0,
+                    ColorMin = this.createColor("e65c1acc"),
+                    ColorMax = this.createColor("ffb347aa"),
+                    ScaleMin = 0.55,
+                    ScaleMax = 0.9,
+                    VelocityMin = 15,
+                    VelocityMax = 35,
+                    ForceMin = this.createVec(0, 0),
+                    ForceMax = this.createVec(0, 0)
+                },
+                {
+                    LifeTimeMin = 0.1,
+                    LifeTimeMax = 0.2,
+                    ColorMin = this.createColor("e65c1a00"),
+                    ColorMax = this.createColor("ffb34700"),
+                    ScaleMin = 0.75,
+                    ScaleMax = 1.0,
+                    VelocityMin = 0,
+                    VelocityMax = 0,
+                    ForceMin = this.createVec(0, -100),
+                    ForceMax = this.createVec(0, -100)
+                }
+            ]
+        };
+
+        try
+        {
+            this.Tactical.spawnParticleEffect(false, effect.Brushes, _targetTile, effect.Delay, effect.Quantity, effect.LifeTimeQuantity, effect.SpawnRate, effect.Stages, this.createVec(0, 70));
+        }
+        catch (e)
+        {
+            ::AuraRouting.Mod.Debug.printLog("[AuraRouting] Fear burst failed: " + e);
+        }
     }
 
     function onTargetSelected( _targetTile )
