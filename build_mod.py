@@ -181,6 +181,10 @@ class ModBuilder:
                 return
 
         subprocess.run(["taskkill", "/F", "/IM", "BattleBrothers.exe"], check=True)
+        if self.is_game_running():
+            raise RuntimeError(
+                "Battle Brothers is still running after force termination."
+            )
 
     def build(self, launch_game=False, restart_game=False):
         """Main build process"""

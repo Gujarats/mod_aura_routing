@@ -86,6 +86,21 @@ class ModBuilderLaunchGameTests(unittest.TestCase):
         builder.restart_game.assert_not_called()
         builder.launch_game.assert_not_called()
 
+    def test_persistent_process_after_force_kill_prevents_launch(self):
+        builder = self.make_builder()
+        builder.prebuild_cleanup = MagicMock()
+        builder.build_brushes = MagicMock()
+        builder.create_zip_archives = MagicMock()
+        builder.launch_game = MagicMock()
+
+        with patch("build_mod.platform.system", return_value="Windows"), patch.object(
+            builder, "is_game_running", side_effect=[True] * 10
+        ), patch("build_mod.subprocess.run"), patch("build_mod.time.sleep"):
+            with self.assertRaises(SystemExit):
+                builder.build(launch_game=True, restart_game=True)
+
+        builder.launch_game.assert_not_called()
+
 
 class ModBuilderRestartGameTests(unittest.TestCase):
     def test_is_game_running_matches_tasklist_stdout_case_insensitively(self):
@@ -129,9 +144,10 @@ class ModBuilderRestartGameTests(unittest.TestCase):
         builder = build_mod.ModBuilder.__new__(build_mod.ModBuilder)
 
         with patch("build_mod.platform.system", return_value="Windows"), patch.object(
-            builder, "is_game_running", side_effect=[True] * 9
+            builder, "is_game_running", side_effect=[True] * 10
         ), patch("build_mod.subprocess.run") as run, patch("build_mod.time.sleep") as sleep:
-            builder.restart_game()
+            with self.assertRaisesRegex(RuntimeError, "still running after force termination"):
+                builder.restart_game()
 
         self.assertEqual(
             run.call_args_list,
