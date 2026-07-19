@@ -8,6 +8,8 @@ import os
 import sys
 import shutil
 import argparse
+import subprocess
+import time
 from pathlib import Path
 import platform
 from buildscript.lib import VersionExtractor, BuildError, load_config
@@ -144,7 +146,47 @@ class ModBuilder:
         finally:
             os.chdir(original_cwd)
 
-    def build(self):
+    def launch_game(self):
+        """Launch Battle Brothers through Steam on Windows."""
+        if platform.system() != "Windows":
+            return
+
+        subprocess.run(
+            ["cmd", "/c", "start", "", "steam://run/365360"], check=True
+        )
+
+    def is_game_running(self):
+        """Return whether Battle Brothers is currently running on Windows."""
+        result = subprocess.run(
+            ["tasklist", "/FI", "IMAGENAME eq BattleBrothers.exe", "/NH"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return "battlebrothers.exe" in result.stdout.lower()
+
+    def restart_game(self):
+        """Request a running Battle Brothers process to exit before launching it."""
+        if platform.system() != "Windows":
+            return
+
+        print("Warning: restarting Battle Brothers can discard unsaved game progress.")
+        if not self.is_game_running():
+            return
+
+        subprocess.run(["taskkill", "/IM", "BattleBrothers.exe"], check=True)
+        for _ in range(8):
+            time.sleep(0.25)
+            if not self.is_game_running():
+                return
+
+        subprocess.run(["taskkill", "/F", "/IM", "BattleBrothers.exe"], check=True)
+        if self.is_game_running():
+            raise RuntimeError(
+                "Battle Brothers is still running after force termination."
+            )
+
+    def build(self, launch_game=False, restart_game=False):
         """Main build process"""
         try:
             print("Starting Mod build process...")
@@ -168,6 +210,11 @@ class ModBuilder:
 
             # Create zip archives
             self.create_zip_archives()
+
+            if restart_game:
+                self.restart_game()
+            if launch_game:
+                self.launch_game()
 
             print("Legends mod build completed successfully!")
 
@@ -197,11 +244,24 @@ def main():
         nargs="?",
         help="Build directory (default: from .build_config.py or './build')",
     )
+    parser.add_argument(
+        "--launch-game",
+        action="store_true",
+        help="Launch Battle Brothers through Steam after a successful build",
+    )
+    parser.add_argument(
+        "--restart-game",
+        action="store_true",
+        help="Restart Battle Brothers before launching it after a successful build",
+    )
 
     args = parser.parse_args()
 
     builder = ModBuilder(args.bb_dir, args.repo_dir, args.build_dir)
-    builder.build()
+    builder.build(
+        launch_game=args.launch_game or args.restart_game,
+        restart_game=args.restart_game,
+    )
     print("Build process completed. Check the Battle Brothers data directory for the generated zip files.")
 
 
