@@ -2,7 +2,7 @@
 
 ## Goal
 
-On Windows, running `python build_mod.py` builds and deploys the Aura Routing ZIP, then requests Steam to launch Battle Brothers.
+Superseded by the opt-in launch design: normal `python build_mod.py` builds and deploys the Aura Routing ZIP without launching the game. Use `python build_mod.py --launch-game` to request a Steam launch.
 
 ## Design
 
