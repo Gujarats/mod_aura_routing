@@ -8,6 +8,7 @@ import os
 import sys
 import shutil
 import argparse
+import subprocess
 from pathlib import Path
 import platform
 from buildscript.lib import VersionExtractor, BuildError, load_config
@@ -144,6 +145,15 @@ class ModBuilder:
         finally:
             os.chdir(original_cwd)
 
+    def launch_game(self):
+        """Launch Battle Brothers through Steam on Windows."""
+        if platform.system() != "Windows":
+            return
+
+        subprocess.run(
+            ["cmd", "/c", "start", "", "steam://run/365360"], check=True
+        )
+
     def build(self):
         """Main build process"""
         try:
@@ -168,6 +178,8 @@ class ModBuilder:
 
             # Create zip archives
             self.create_zip_archives()
+
+            self.launch_game()
 
             print("Legends mod build completed successfully!")
 
