@@ -40,7 +40,6 @@
 						foreach (perk in ::Const.Perks.Aura) {
 							local p = clone perk;
 							delete p.verifyPrerequisites;
-							p.druid_blocked <- false;
 							perks[sLevel-1].push(p);
 						}
 						result.aura_routing_perkTree <- perks;
