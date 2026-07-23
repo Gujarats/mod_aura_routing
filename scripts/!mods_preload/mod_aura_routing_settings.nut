@@ -6,7 +6,7 @@
 	local fallback = ::AuraRouting.Mod.ModSettings.addPage("Fallback Defense");
 
 	general.addRangeSetting("UsesPerBattle",
-		1, 1, 3, 1,
+		2, 1, 3, 1,
 		"Uses Per Battle",
 		"How many times each character can use Aura Routing in one battle."
 	);
