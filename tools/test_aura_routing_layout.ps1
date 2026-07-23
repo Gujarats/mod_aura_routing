@@ -41,22 +41,26 @@ function Forbid-Token {
 }
 
 Require-Token 'scripts/!mods_preload/mod_aura_routing_settings.nut' @(
-    'page.addRangeSetting("UsesPerBattle"',
+    'local general = ::AuraRouting.Mod.ModSettings.addPage("General");',
+    'local attack = ::AuraRouting.Mod.ModSettings.addPage("Attack");',
+    'local morale = ::AuraRouting.Mod.ModSettings.addPage("Morale");',
+    'local fallback = ::AuraRouting.Mod.ModSettings.addPage("Fallback Defense");',
+    'general.addRangeSetting("UsesPerBattle"',
     '"PerkLevel"',
-    'page.addRangeSetting("MoraleResolvePenalty", 10, 0, 50, 1',
-    'page.addRangeSetting("MoraleDropSteps", 1, 1, 3, 1',
-    'page.addBooleanSetting("AllowFleeingOnAlreadyWavering", true',
-    'page.addRangeSetting("AttackHitChanceBonus", 0, -30, 30, 1',
-    'page.addRangeSetting("AttackDamageMin", 15, 0, 100, 1',
-    'page.addRangeSetting("AttackDamageMax", 30, 0, 150, 1',
-    'page.addRangeSetting("AttackArmorDamageMultPct", 75, 0, 200, 5',
-    'page.addRangeSetting("AttackDirectDamagePct", 10, 0, 100, 1',
-    'page.addRangeSetting("NoAffectedMeleeDefense", 35, 0, 100, 1',
-    'page.addRangeSetting("NoAffectedRangedDefense", 25, 0, 100, 1',
-    'page.addRangeSetting("OneAffectedMeleeDefense", 20, 0, 100, 1',
-    'page.addRangeSetting("OneAffectedRangedDefense", 15, 0, 100, 1',
-    'page.addRangeSetting("TwoAffectedMeleeDefense", 10, 0, 100, 1',
-    'page.addRangeSetting("TwoAffectedRangedDefense", 5, 0, 100, 1'
+    'morale.addRangeSetting("MoraleResolvePenalty", 10, 0, 50, 1',
+    'morale.addRangeSetting("MoraleDropSteps", 1, 1, 3, 1',
+    'morale.addBooleanSetting("AllowFleeingOnAlreadyWavering", true',
+    'attack.addRangeSetting("AttackHitChanceBonus", 0, -30, 30, 1',
+    'attack.addRangeSetting("AttackDamageMin", 15, 0, 100, 1',
+    'attack.addRangeSetting("AttackDamageMax", 30, 0, 150, 1',
+    'attack.addRangeSetting("AttackArmorDamageMultPct", 75, 0, 200, 5',
+    'attack.addRangeSetting("AttackDirectDamagePct", 10, 0, 100, 1',
+    'fallback.addRangeSetting("NoAffectedMeleeDefense", 35, 0, 100, 1',
+    'fallback.addRangeSetting("NoAffectedRangedDefense", 25, 0, 100, 1',
+    'fallback.addRangeSetting("OneAffectedMeleeDefense", 20, 0, 100, 1',
+    'fallback.addRangeSetting("OneAffectedRangedDefense", 15, 0, 100, 1',
+    'fallback.addRangeSetting("TwoAffectedMeleeDefense", 10, 0, 100, 1',
+    'fallback.addRangeSetting("TwoAffectedRangedDefense", 5, 0, 100, 1'
 )
 
 Require-Token 'scripts/skills/effects/aura_routing_evasion_effect.nut' @(
