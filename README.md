@@ -2,7 +2,7 @@
 
 An active ability and perk modification for **Battle Brothers**, built using the Modding Standards & Utilities (MSU) framework and Modern Hooks. 
 
-This mod introduces a terrifying, high-tier ability that allows an elite character to completely shatter the morale of surrounding enemies, forcing them into an immediate rout once per battle.
+This mod introduces a terrifying, high-tier ability that lets an elite character attack nearby enemies with aura pressure, damage them on landed hits, and shake their morale without guaranteeing a rout.
 
 ## Special thanks to
  - [Proper Druid](https://www.nexusmods.com/battlebrothers/mods/1061)
@@ -14,7 +14,7 @@ source  image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp
 
 ## 🚀 Features
 
-* **Custom Active Skill ("Aura Supreme"):** Forces all enemies within a specified tile radius to instantly fail their morale checks and transition into the **Fleeing** state.
+* **Custom Active Skill ("Aura Routing"):** Aura Routing attacks up to three enemies in a frontal arc using normal hit chance. Landed hits can damage armor and hitpoints, then force a Resolve check; enemies that fail lose morale, and enemies already near breaking can be forced into flight depending on settings. If the aura fails to affect many enemies, unused force returns to the caster as temporary Melee and Ranged Defense until their next turn.
 * **Dynamic Menu Configuration (MSU):** No script editing required. Adjust balance variables directly from the in-game Mod Settings menu.
 * **Perk Tree Integration:** Fully integrated into the character perk tree grid as a pickable talent.
 
@@ -22,9 +22,18 @@ source  image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp
 
 Through the **Mod Settings** menu, you can dynamically configure the following parameters on the fly:
 
-1. **Perk Level Requirement:** Adjust which level row (Tier 1 to 10) the perk appears on (Default: Row 7).
-2. **Once Per Battle Restriction:** Toggle whether the ability can only be cast a single time per combat encounter, or used continuously (Default: Enabled).
-3. **Aura Effect Radius:** Dynamically scale the area of effect from 1 to 3 tiles out from the caster (Default: 3 Tiles).
+1. **Uses Per Battle:** Adjust how many times each character can use Aura Routing per battle.
+2. **Perk Level:** Adjust which perk row unlocks Aura Routing.
+3. **Morale Resolve Penalty:** Adjust how hard the follow-up Resolve check is after a landed hit.
+4. **Morale Drop Steps:** Adjust how many morale levels a failed Resolve check removes.
+5. **Fleeing From Wavering:** Allow Wavering enemies to collapse directly into Fleeing after a failed check.
+6. **Attack Hit Chance Bonus:** Adjust the flat hit chance modifier for Aura Routing attacks.
+7. **Attack Minimum/Maximum Damage:** Adjust regular damage dealt by landed Aura Routing attacks.
+8. **Attack Armor Damage:** Adjust armor damage dealt by landed Aura Routing attacks.
+9. **Attack Direct Damage:** Adjust how much landed attack damage can pass through armor.
+10. **No Effect Melee/Ranged Defense:** Defense gained until next turn if no enemies are affected.
+11. **One Effect Melee/Ranged Defense:** Defense gained until next turn if one enemy is affected.
+12. **Two Effect Melee/Ranged Defense:** Defense gained until next turn if two enemies are affected.
 
 
 # 🛠️ Requirements
