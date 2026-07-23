@@ -2,6 +2,7 @@ var AuraRouting = {};
 
 AuraRouting.CharacterScreenPerksModule_loadPerkTreesWithBrotherData
 	= CharacterScreenPerksModule.prototype.loadPerkTreesWithBrotherData;
+	
 CharacterScreenPerksModule.prototype.loadPerkTreesWithBrotherData = function (_brother)
 {
 	if (_brother.aura_routing_perkTree)
