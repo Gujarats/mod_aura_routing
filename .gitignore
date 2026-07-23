@@ -4,3 +4,6 @@
 brushes
 build
 __pycache__
+.superpowers
+dist
+release
