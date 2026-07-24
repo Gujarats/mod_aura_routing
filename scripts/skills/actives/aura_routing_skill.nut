@@ -3,7 +3,8 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		Charges = 0,
 		MaxCharges = 0,
 		LastAuraRoutingHits = null,
-		LastAuraRoutingMisses = null
+		LastAuraRoutingMisses = null,
+		LastAuraRoutingPreviewTile = null
 	},
 
 	function create()
@@ -33,6 +34,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 
 		this.m.LastAuraRoutingHits = {};
 		this.m.LastAuraRoutingMisses = {};
+		this.m.LastAuraRoutingPreviewTile = null;
 		this.m.MaxCharges = ::AuraRouting.Mod.ModSettings.getSetting("UsesPerBattle").getValue();
 		this.m.Charges = this.m.MaxCharges;
 	}
@@ -104,6 +106,151 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		}
 
 		return tiles;
+	}
+
+	function isTileInSelectedArc( _user, _targetTile )
+	{
+		if (_user == null || _targetTile == null) return false;
+		if (this.m.LastAuraRoutingPreviewTile == null) return false;
+
+		local tiles = this.collectArcTiles(_user, this.m.LastAuraRoutingPreviewTile);
+		foreach (tile in tiles)
+		{
+			if (tile.isSameTileAs(_targetTile)) return true;
+		}
+
+		return false;
+	}
+
+	function getMoraleChangeForPreview( _entity )
+	{
+		if (_entity == null) return 0;
+
+		local before = _entity.getMoraleState();
+		local steps = ::AuraRouting.Mod.ModSettings.getSetting("MoraleDropSteps").getValue();
+		local change = -steps;
+
+		if (before == this.Const.MoraleState.Wavering
+			&& ::AuraRouting.Mod.ModSettings.getSetting("AllowFleeingOnAlreadyWavering").getValue())
+		{
+			change = this.Const.MoraleState.Fleeing - before;
+		}
+		else if (before + change < this.Const.MoraleState.Fleeing)
+		{
+			change = this.Const.MoraleState.Fleeing - before;
+		}
+
+		return change;
+	}
+
+	function getMoraleResistChancePct( _user, _entity )
+	{
+		if (_user == null || _entity == null) return 0;
+		if (!this.canAffectMorale(_entity)) return 100;
+
+		local change = this.getMoraleChangeForPreview(_entity);
+		if (change >= 0) return 100;
+
+		local properties = _entity.getCurrentProperties();
+		local difficulty = -::AuraRouting.Mod.ModSettings.getSetting("MoraleResolvePenalty").getValue();
+		difficulty = difficulty * properties.MoraleEffectMult;
+
+		local bravery = (_entity.getBravery() + properties.MoraleCheckBravery[this.Const.MoraleCheckType.MentalAttack]) * properties.MoraleCheckBraveryMult[this.Const.MoraleCheckType.MentalAttack];
+		if (bravery > 500) return 100;
+
+		// Mirrors Battle Brothers 1.5.2.3 data_001 actor.checkMorale without rolling or mutating morale.
+		local myTile = _entity.getTile();
+		local numOpponentsAdjacent = 0;
+		local numAlliesAdjacent = 0;
+		local threatBonus = 0;
+
+		for (local i = 0; i != 6; i = ++i)
+		{
+			if (!myTile.hasNextTile(i)) continue;
+
+			local tile = myTile.getNextTile(i);
+			if (!tile.IsOccupiedByActor) continue;
+
+			local neighbor = tile.getEntity();
+			if (neighbor == null || neighbor.getMoraleState() == this.Const.MoraleState.Fleeing) continue;
+
+			if (neighbor.isAlliedWith(_entity))
+			{
+				numAlliesAdjacent = ++numAlliesAdjacent;
+			}
+			else
+			{
+				numOpponentsAdjacent = ++numOpponentsAdjacent;
+				threatBonus = threatBonus + neighbor.getCurrentProperties().Threat;
+			}
+		}
+
+		local score = bravery + difficulty - numOpponentsAdjacent * this.Const.Morale.OpponentsAdjacentMult + numAlliesAdjacent * this.Const.Morale.AlliesAdjacentMult - threatBonus;
+		local baseResist = score;
+		if (baseResist < 0) baseResist = 0;
+		if (baseResist > 95) baseResist = 95;
+		baseResist = baseResist.tointeger();
+
+		local rerollChance = properties.RerollMoraleChance;
+		if (rerollChance < 0) rerollChance = 0;
+		if (rerollChance > 100) rerollChance = 100;
+		rerollChance = rerollChance.tointeger();
+
+		local resistChance = baseResist + (100 - baseResist) * rerollChance * baseResist / 10000;
+		if (resistChance < 0) resistChance = 0;
+		if (resistChance > 100) resistChance = 100;
+
+		return resistChance.tointeger();
+	}
+
+	function getMoraleDropChanceOnHitPct( _user, _entity )
+	{
+		if (_user == null || _entity == null) return 0;
+		if (!this.canAffectMorale(_entity)) return 0;
+
+		local change = this.getMoraleChangeForPreview(_entity);
+		if (change >= 0) return 0;
+
+		return 100 - this.getMoraleResistChancePct(_user, _entity);
+	}
+
+	function getAuraRoutingTargetTooltip( _targetEntity )
+	{
+		local ret = [];
+		local user = this.m.Container.getActor();
+		if (user == null || _targetEntity == null) return ret;
+		if (!_targetEntity.isAlive() || _targetEntity.isAlliedWith(user)) return ret;
+		if (!this.isTileInSelectedArc(user, _targetEntity.getTile())) return ret;
+
+		if (!this.canAffectMorale(_targetEntity))
+		{
+			ret.push({
+				id = 91001,
+				type = "text",
+				icon = "ui/icons/bravery.png",
+				text = "[color=" + this.Const.UI.Color.NegativeValue + "]Immune to Aura Routing morale drop[/color]"
+			});
+			return ret;
+		}
+
+		local dropChance = this.getMoraleDropChanceOnHitPct(user, _targetEntity);
+		local resistChance = this.getMoraleResistChancePct(user, _targetEntity);
+		local change = -this.getMoraleChangeForPreview(_targetEntity);
+
+		ret.push({
+			id = 91001,
+			type = "text",
+			icon = "ui/icons/bravery.png",
+			text = "Morale drop on hit: [color=" + this.Const.UI.Color.PositiveValue + "]" + dropChance + "%[/color]"
+		});
+		ret.push({
+			id = 91002,
+			type = "text",
+			icon = "ui/icons/special.png",
+			text = "Target Resolve: [color=" + this.Const.UI.Color.PositiveValue + "]" + _targetEntity.getBravery() + "[/color], resist chance: [color=" + this.Const.UI.Color.PositiveValue + "]" + resistChance + "%[/color], morale drop: [color=" + this.Const.UI.Color.NegativeValue + "]" + change + " step" + (change == 1 ? "" : "s") + "[/color]"
+		});
+
+		return ret;
 	}
 
 	function canAffectMorale( _entity )
@@ -227,12 +374,19 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 	function onTargetSelected( _targetTile )
 	{
 		local actor = this.m.Container.getActor();
+		this.m.LastAuraRoutingPreviewTile = _targetTile;
 		local tiles = this.collectArcTiles(actor, _targetTile);
 
 		foreach (tile in tiles)
 		{
 			this.Tactical.getHighlighter().addOverlayIcon(this.Const.Tactical.Settings.AreaOfEffectIcon, tile, tile.Pos.X, tile.Pos.Y);
 		}
+	}
+
+	function onTargetDeselected()
+	{
+		this.Tactical.getHighlighter().clearOverlayIcons();
+		this.m.LastAuraRoutingPreviewTile = null;
 	}
 
 	function getTooltip()
@@ -282,6 +436,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		this.m.MaxCharges = this.m.Charges;
 		this.m.LastAuraRoutingHits = {};
 		this.m.LastAuraRoutingMisses = {};
+		this.m.LastAuraRoutingPreviewTile = null;
 	}
 
 	function onCombatFinished()

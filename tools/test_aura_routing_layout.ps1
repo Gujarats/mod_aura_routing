@@ -80,7 +80,14 @@ Require-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     'function onTargetHit( _skill, _targetEntity, _bodyPart, _damageInflictedHitpoints, _damageInflictedArmor )',
     'function onTargetMissed( _skill, _targetEntity )',
     'function tryDropMorale( _user, _entity )',
+    'function isTileInSelectedArc( _user, _targetTile )',
+    'function getMoraleChangeForPreview( _entity )',
+    'function getMoraleResistChancePct( _user, _entity )',
+    'function getMoraleDropChanceOnHitPct( _user, _entity )',
+    'function getAuraRoutingTargetTooltip( _targetEntity )',
     'function applyFallbackEvasion( _user, _affectedCount )',
+    'function onTargetDeselected()',
+    'this.Tactical.getHighlighter().clearOverlayIcons();',
     'this.skill.isUsable()',
     'this.m.IsUsingHitchance = true;',
     'this.m.HitChanceBonus = ::AuraRouting.Mod.ModSettings.getSetting("AttackHitChanceBonus").getValue();',
@@ -88,21 +95,37 @@ Require-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     '_properties.DamageRegularMax = maxDamage;',
     '_properties.DamageArmorMult = ::AuraRouting.Mod.ModSettings.getSetting("AttackArmorDamageMultPct").getValue() / 100.0;',
     'this.m.DirectDamageMult = ::AuraRouting.Mod.ModSettings.getSetting("AttackDirectDamagePct").getValue() / 100.0;',
+    'Mirrors Battle Brothers 1.5.23 data_001 actor.checkMorale',
+    'local score = bravery + difficulty - numOpponentsAdjacent * this.Const.Morale.OpponentsAdjacentMult + numAlliesAdjacent * this.Const.Morale.AlliesAdjacentMult - threatBonus;',
+    'local resistChance = baseResist + (100 - baseResist) * rerollChance * baseResist / 10000;',
+    '"Morale drop on hit: [color=" + this.Const.UI.Color.PositiveValue + "]" + dropChance + "%[/color]"',
     '::new("scripts/skills/effects/aura_routing_evasion_effect")',
     'affectedCount++',
     'return affectedCount > 0 || evasionApplied;'
 )
 
+Require-Token 'scripts/!mods_preload/mod_aura_routing_loader.nut' @(
+    'mod.hook("scripts/entity/tactical/actor", function(q)',
+    'q.getTooltip = @(__original) function( _targetedWithSkill = null )',
+    '_targetedWithSkill.getID() == "actives.aura_routing"',
+    'local auraRoutingLines = _targetedWithSkill.getAuraRoutingTargetTooltip(this);',
+    'tooltip.push(line);'
+)
+
 Forbid-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     'entity.setMoraleState(this.Const.MoraleState.Fleeing);',
     'function isUsingHitchance()',
-    'text = "Has 100% chance to hit"'
+    'text = "Has 100% chance to hit"',
+    'Total morale drop chance'
 )
 
 Require-Token 'README.md' @(
     'Aura Routing attacks up to three enemies in a frontal arc using normal hit chance.',
     'Attack Hit Chance Bonus',
-    'No Effect Melee/Ranged Defense'
+    'No Effect Melee/Ranged Defense',
+    'When Aura Routing is selected, hovering a highlighted enemy shows its morale drop chance on hit.',
+    'The morale preview formula mirrors Battle Brothers 1.5.23 data_001 scripts/entity/tactical/actor.nut checkMorale().',
+    'If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.'
 )
 
 Write-Host 'Aura Routing layout validation passed.'

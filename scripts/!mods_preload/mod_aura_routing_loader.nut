@@ -50,4 +50,25 @@
 			return result;
 		}
 	});
+
+	mod.hook("scripts/entity/tactical/actor", function(q)
+	{
+		q.getTooltip = @(__original) function( _targetedWithSkill = null )
+		{
+			local tooltip = __original(_targetedWithSkill);
+
+			if (_targetedWithSkill != null
+				&& _targetedWithSkill.getID() == "actives.aura_routing"
+				&& "getAuraRoutingTargetTooltip" in _targetedWithSkill)
+			{
+				local auraRoutingLines = _targetedWithSkill.getAuraRoutingTargetTooltip(this);
+				foreach (line in auraRoutingLines)
+				{
+					tooltip.push(line);
+				}
+			}
+
+			return tooltip;
+		}
+	});
 });
