@@ -95,6 +95,7 @@ Require-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     '_properties.DamageRegularMax = maxDamage;',
     '_properties.DamageArmorMult = ::AuraRouting.Mod.ModSettings.getSetting("AttackArmorDamageMultPct").getValue() / 100.0;',
     'this.m.DirectDamageMult = ::AuraRouting.Mod.ModSettings.getSetting("AttackDirectDamagePct").getValue() / 100.0;',
+    'Mirrors Battle Brothers 1.5.23 data_001 actor.checkMorale',
     'local score = bravery + difficulty - numOpponentsAdjacent * this.Const.Morale.OpponentsAdjacentMult + numAlliesAdjacent * this.Const.Morale.AlliesAdjacentMult - threatBonus;',
     'local resistChance = baseResist + (100 - baseResist) * rerollChance * baseResist / 10000;',
     '"Morale drop on hit: [color=" + this.Const.UI.Color.PositiveValue + "]" + dropChance + "%[/color]"',
@@ -122,7 +123,9 @@ Require-Token 'README.md' @(
     'Aura Routing attacks up to three enemies in a frontal arc using normal hit chance.',
     'Attack Hit Chance Bonus',
     'No Effect Melee/Ranged Defense',
-    'When Aura Routing is selected, hovering a highlighted enemy shows its morale drop chance on hit.'
+    'When Aura Routing is selected, hovering a highlighted enemy shows its morale drop chance on hit.',
+    'The morale preview formula mirrors Battle Brothers 1.5.23 data_001 scripts/entity/tactical/actor.nut checkMorale().',
+    'If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.'
 )
 
 Write-Host 'Aura Routing layout validation passed.'

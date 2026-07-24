@@ -57,3 +57,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 # Known Issue
  - start the hit animation somehow cannot be trigger without attack/damaged, need to find a way to tigger damange animation with 0 damage
  - overlay icon somehow does not look as good as the vanilla
+ - The morale preview formula mirrors Battle Brothers 1.5.2.3 data_001 scripts/entity/tactical/actor.nut checkMorale(). If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.

@@ -158,6 +158,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		local bravery = (_entity.getBravery() + properties.MoraleCheckBravery[this.Const.MoraleCheckType.MentalAttack]) * properties.MoraleCheckBraveryMult[this.Const.MoraleCheckType.MentalAttack];
 		if (bravery > 500) return 100;
 
+		// Mirrors Battle Brothers 1.5.2.3 data_001 actor.checkMorale without rolling or mutating morale.
 		local myTile = _entity.getTile();
 		local numOpponentsAdjacent = 0;
 		local numAlliesAdjacent = 0;
