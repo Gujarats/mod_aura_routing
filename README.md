@@ -14,7 +14,7 @@ source  image : https://media.craiyon.com/2025-07-15/MkCFt4X6Ql2ltI2iZdSUew.webp
 
 ## 🚀 Features
 
-* **Custom Active Skill ("Aura Routing"):** Aura Routing attacks up to three enemies in a frontal arc using normal hit chance. Landed hits can damage armor and hitpoints, then force a Resolve check; enemies that fail lose morale, and enemies already near breaking can be forced into flight depending on settings. If the aura fails to affect many enemies, unused force returns to the caster as temporary Melee and Ranged Defense until their next turn.
+* **Custom Active Skill ("Aura Routing"):** Aura Routing attacks up to three enemies in a frontal arc using normal hit chance. Landed hits can damage armor and hitpoints, then force a Resolve check; enemies that fail lose morale, and enemies already near breaking can be forced into flight depending on settings. If the aura fails to affect many enemies, unused force returns to the caster as temporary Melee and Ranged Defense until their next turn. When Aura Routing is selected, hovering a highlighted enemy shows its morale drop chance on hit.
 * **Dynamic Menu Configuration (MSU):** No script editing required. Adjust balance variables directly from the in-game Mod Settings menu.
 * **Perk Tree Integration:** Fully integrated into the character perk tree grid as a pickable talent.
 
