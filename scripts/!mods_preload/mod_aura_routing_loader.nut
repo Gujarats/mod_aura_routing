@@ -1,7 +1,7 @@
 ::AuraRouting <- {
 	ID = "mod_aura_routing",
 	Name = "Aura Routing",
-	Version = "0.0.6"
+	Version = "0.0.7"
 };
 
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
