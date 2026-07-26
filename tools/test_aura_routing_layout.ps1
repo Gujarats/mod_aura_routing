@@ -95,7 +95,7 @@ Require-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     '_properties.DamageRegularMax = maxDamage;',
     '_properties.DamageArmorMult = ::AuraRouting.Mod.ModSettings.getSetting("AttackArmorDamageMultPct").getValue() / 100.0;',
     'this.m.DirectDamageMult = ::AuraRouting.Mod.ModSettings.getSetting("AttackDirectDamagePct").getValue() / 100.0;',
-    'Mirrors Battle Brothers 1.5.23 data_001 actor.checkMorale',
+    'Mirrors Battle Brothers 1.5.2.3 data_001 actor.checkMorale',
     'local score = bravery + difficulty - numOpponentsAdjacent * this.Const.Morale.OpponentsAdjacentMult + numAlliesAdjacent * this.Const.Morale.AlliesAdjacentMult - threatBonus;',
     'local resistChance = baseResist + (100 - baseResist) * rerollChance * baseResist / 10000;',
     '"Morale drop on hit: [color=" + this.Const.UI.Color.PositiveValue + "]" + dropChance + "%[/color]"',
@@ -113,6 +113,7 @@ Require-Token 'scripts/!mods_preload/mod_aura_routing_loader.nut' @(
 )
 
 Forbid-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
+    'ui/icons/uses.png',
     'entity.setMoraleState(this.Const.MoraleState.Fleeing);',
     'function isUsingHitchance()',
     'text = "Has 100% chance to hit"',
@@ -124,7 +125,7 @@ Require-Token 'README.md' @(
     'Attack Hit Chance Bonus',
     'No Effect Melee/Ranged Defense',
     'When Aura Routing is selected, hovering a highlighted enemy shows its morale drop chance on hit.',
-    'The morale preview formula mirrors Battle Brothers 1.5.23 data_001 scripts/entity/tactical/actor.nut checkMorale().',
+    'The morale preview formula mirrors Battle Brothers 1.5.2.3 data_001 scripts/entity/tactical/actor.nut checkMorale().',
     'If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.'
 )
 

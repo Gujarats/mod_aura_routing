@@ -410,7 +410,7 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 			{
 				id = 4,
 				type = "text",
-				icon = "ui/icons/uses.png",
+				icon = "ui/icons/skills.png",
 				text = "Uses remaining: " + this.m.Charges + "/" + this.m.MaxCharges
 			},
 			{
