@@ -65,6 +65,33 @@ Require-Token 'scripts/!mods_preload/mod_aura_routing_settings.nut' @(
 
 Require-Token 'scripts/skills/effects/aura_routing_evasion_effect.nut' @(
     'effects.aura_routing_evasion',
+    'PreviousPermanentInjury4Brush = null',
+    'PreviousPermanentInjury4Visible = false',
+    'PreviousPermanentInjury4Alpha = 255',
+    'PulseToken = 0',
+    'PulseStartMs = 0',
+    'PulsePeriodMs = 1200',
+    'PulseMinAlpha = 90',
+    'PulseMaxAlpha = 255',
+    'PulseTickMs = 60',
+    'function showFallbackEyes()',
+    'function hideFallbackEyes()',
+    'function startFallbackEyesPulse()',
+    'function stopFallbackEyesPulse()',
+    'function fallbackEyesPulseTick( _ctx )',
+    'this.doesBrushExist("zombie_rage_eyes")',
+    'actor.hasSprite("permanent_injury_4")',
+    'sprite.setBrush("zombie_rage_eyes");',
+    'sprite.fadeIn(1500);',
+    'sprite.fadeOutAndHide(1500);',
+    'sprite.Alpha = alpha.tointeger();',
+    '::Time.scheduleEvent(::TimeUnit.Real, this.m.PulseTickMs, this.fallbackEyesPulseTick.bindenv(this), _ctx);',
+    'Aura Fallback Eyes: applying zombie_rage_eyes',
+    'Aura Fallback Eyes: pulse started',
+    'Aura Fallback Eyes: pulse stopped',
+    'Aura Fallback Eyes: missing permanent_injury_4 sprite',
+    'Aura Fallback Eyes: missing zombie_rage_eyes brush',
+    'Aura Fallback Eyes: removed',
     'function setDefense( _meleeDefense, _rangedDefense )',
     '_properties.MeleeDefense += this.m.MeleeDefenseBonus;',
     '_properties.RangedDefense += this.m.RangedDefenseBonus;',
@@ -114,10 +141,18 @@ Require-Token 'scripts/!mods_preload/mod_aura_routing_loader.nut' @(
 
 Forbid-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     'ui/icons/uses.png',
+    'actor.setSpriteOffset("miniboss"',
+    'glow.setBrush("aura_body_glow_v2");',
     'entity.setMoraleState(this.Const.MoraleState.Fleeing);',
     'function isUsingHitchance()',
     'text = "Has 100% chance to hit"',
     'Total morale drop chance'
+)
+
+Forbid-Token 'scripts/skills/effects/aura_routing_evasion_effect.nut' @(
+    'actor.setSpriteOffset("miniboss"',
+    'glow.setBrush("aura_body_glow_v2");',
+    'function pulseTick('
 )
 
 Require-Token 'README.md' @(
