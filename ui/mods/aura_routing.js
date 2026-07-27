@@ -5,7 +5,7 @@ AuraRouting.CharacterScreenPerksModule_loadPerkTreesWithBrotherData
 	
 CharacterScreenPerksModule.prototype.loadPerkTreesWithBrotherData = function (_brother)
 {
-	if (_brother.aura_routing_perkTree)
+	if (_brother.aura_routing_perkTree && !_brother.necro_perkTree)
 	{
 		this.resetPerkTree(this.mPerkTree);
 		this.onPerkTreeLoaded(null, _brother.aura_routing_perkTree);

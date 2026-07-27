@@ -7,7 +7,7 @@
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
 
-::AuraRouting.HookMod.queue(">mod_msu", function()
+::AuraRouting.HookMod.queue(">mod_msu", ">mod_necro", function()
 {
 	::AuraRouting.Mod <- ::MSU.Class.Mod(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 	::AuraRouting.registerSettings();
@@ -26,9 +26,10 @@
 			if (_entity != null)
 			{
 				local skills = _entity.getSkills();
+				local isNecro = skills != null && skills.hasSkill("background.necro");
 				local settings = ::AuraRouting.Mod.ModSettings;
 				local sLevel = settings.getSetting("PerkLevel").getValue();
-				if (skills != null)
+				if (skills != null && !isNecro)
 				{
 					// NOTES hardcoded to check the mod "proper druid"
 					// TODO need to change to proper id
