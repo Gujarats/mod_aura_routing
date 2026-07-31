@@ -330,6 +330,37 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 		return true;
 	}
 
+	function spawnHolyBarrierPulseFrame( _ctx )
+	{
+		if (_ctx == null || !("tile" in _ctx) || !("brush" in _ctx)) return;
+		if (_ctx.tile == null || !this.doesBrushExist(_ctx.brush)) return;
+
+		this.Tactical.spawnSpriteEffect(_ctx.brush, this.createColor("#ffffff"), _ctx.tile, 0, 15, 0.42, 0.62, 80, 55, 220);
+	}
+
+	function spawnHolyBarrierPulse( _tile )
+	{
+		if (_tile == null) return false;
+		if (!this.doesBrushExist("aura_holy_barrier_01")) return false;
+
+		this.spawnHolyBarrierPulseFrame({
+			tile = _tile,
+			brush = "aura_holy_barrier_01"
+		});
+
+		::Time.scheduleEvent(::TimeUnit.Real, 90, this.spawnHolyBarrierPulseFrame.bindenv(this), {
+			tile = _tile,
+			brush = "aura_holy_barrier_02"
+		});
+
+		::Time.scheduleEvent(::TimeUnit.Real, 180, this.spawnHolyBarrierPulseFrame.bindenv(this), {
+			tile = _tile,
+			brush = "aura_holy_barrier_03"
+		});
+
+		return true;
+	}
+
 	function onUse( _user, _targetTile )
 	{
 		this.spawnAttackEffect(_targetTile, this.Const.Tactical.AttackEffectLash);
@@ -342,7 +373,11 @@ this.aura_routing_skill <- ::inherit("scripts/skills/skill", {
 
 		try
 		{
-			if (this.doesBrushExist("aura_body_glow_v2"))
+			if (this.spawnHolyBarrierPulse(ownTile))
+			{
+				::AuraRouting.Mod.Debug.printLog("[AuraRouting]: spawned holy barrier pulse");
+			}
+			else if (this.doesBrushExist("aura_body_glow_v2"))
 			{
 				::AuraRouting.Mod.Debug.printLog("[AuraRouting]: found brush : aura_body_glow_v2");
 				this.Tactical.spawnSpriteEffect("aura_body_glow_v2", this.createColor("#e63f33"), ownTile, 0, 30, 1.4, 2.4, 100, 60, 400);
