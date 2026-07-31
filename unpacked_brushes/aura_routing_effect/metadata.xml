@@ -1,4 +1,12 @@
 <brush name="gfx/aura_routing_effect.png" version="17">
   <sprite id="aura_routing_effect" ic="FF493A7B" img="effects\aura_routing_effect.png" />
   <sprite id="aura_body_glow_v2" ic="FFD9A845" img="effects\aura_body_glow_v2.png" />
+  <sprite id="aura_holy_barrier_01" ic="FFFFD8A2" img="effects\holy_barrier_01.png" />
+  <sprite id="aura_holy_barrier_02" ic="FFFFD8A2" img="effects\holy_barrier_02.png" />
+  <sprite id="aura_holy_barrier_03" ic="FFFFD8A2" img="effects\holy_barrier_03.png" />
+  <sprite id="aura_holy_barrier_04" ic="FFFFD8A2" img="effects\holy_barrier_04.png" />
+  <sprite id="aura_holy_barrier_05" ic="FFFFD8A2" img="effects\holy_barrier_05.png" />
+  <sprite id="aura_holy_barrier_06" ic="FFFFD8A2" img="effects\holy_barrier_06.png" />
+  <sprite id="aura_holy_barrier_07" ic="FFFFD8A2" img="effects\holy_barrier_07.png" />
+  <sprite id="aura_holy_barrier_08" ic="FFFFD8A2" img="effects\holy_barrier_08.png" />
 </brush>

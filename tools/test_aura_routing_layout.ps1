@@ -127,8 +127,27 @@ Require-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
     'local resistChance = baseResist + (100 - baseResist) * rerollChance * baseResist / 10000;',
     '"Morale drop on hit: [color=" + this.Const.UI.Color.PositiveValue + "]" + dropChance + "%[/color]"',
     '::new("scripts/skills/effects/aura_routing_evasion_effect")',
+    'function spawnHolyBarrierPulseFrame( _ctx )',
+    'function spawnHolyBarrierPulse( _tile )',
+    'brush = "aura_holy_barrier_01"',
+    'brush = "aura_holy_barrier_02"',
+    'brush = "aura_holy_barrier_03"',
+    '::Time.scheduleEvent(::TimeUnit.Real, 90, this.spawnHolyBarrierPulseFrame.bindenv(this),',
+    '::Time.scheduleEvent(::TimeUnit.Real, 180, this.spawnHolyBarrierPulseFrame.bindenv(this),',
+    'this.Tactical.spawnSpriteEffect(_ctx.brush, this.createColor("#ffffff"), _ctx.tile',
     'affectedCount++',
     'return affectedCount > 0 || evasionApplied;'
+)
+
+Require-Token 'unpacked_brushes/aura_routing_effect/metadata.xml' @(
+    '<sprite id="aura_holy_barrier_01"',
+    '<sprite id="aura_holy_barrier_02"',
+    '<sprite id="aura_holy_barrier_03"',
+    '<sprite id="aura_holy_barrier_04"',
+    '<sprite id="aura_holy_barrier_05"',
+    '<sprite id="aura_holy_barrier_06"',
+    '<sprite id="aura_holy_barrier_07"',
+    '<sprite id="aura_holy_barrier_08"'
 )
 
 Require-Token 'scripts/!mods_preload/mod_aura_routing_loader.nut' @(
