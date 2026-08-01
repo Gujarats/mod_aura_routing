@@ -28,6 +28,7 @@ function Assert-Matches($Haystack, $Pattern, $Message) {
 Assert-ContainsLiteral $Settings 'addPage("Developer Options")' "Missing developer setting token: "
 
 $RequiredSettingPatterns = @(
+    'addBooleanSetting\(\s*"DebugLogging"\s*,\s*false',
     'addBooleanSetting\(\s*"EnableDeveloperOptions"\s*,\s*false',
     'addBooleanSetting\(\s*"DeveloperGrantAuraOnLoad"\s*,\s*false',
     'addBooleanSetting\(\s*"DeveloperGrantResourcesOnLoad"\s*,\s*false'
@@ -37,12 +38,21 @@ foreach ($Pattern in $RequiredSettingPatterns) {
     Assert-Matches $Settings $Pattern "Missing developer setting pattern: "
 }
 
+foreach ($Needle in @(
+    'debugLogging.addCallback',
+    '::AuraRouting.DeveloperOptions.configureDebugLogging();'
+)) {
+    Assert-ContainsLiteral $Settings $Needle "Missing developer setting callback token: "
+}
+
 $RequiredDeveloperModuleTokens = @(
     '::AuraRouting.DeveloperOptions',
     '::AuraRouting.DeveloperSession',
     'function init()',
     'function isEnabled()',
     'function configureDebugLogging()',
+    'DebugLogging',
+    'Debug.setFlag("default"',
     'function applyResourcesOnce()',
     'function grantAuraForTest( _entity )',
     'DeveloperGrantAuraOnLoad',
@@ -52,6 +62,10 @@ $RequiredDeveloperModuleTokens = @(
 
 foreach ($Needle in $RequiredDeveloperModuleTokens) {
     Assert-ContainsLiteral $DeveloperOptions $Needle "Missing developer module token: "
+}
+
+if ($DeveloperOptions -match 'Debug\.enable\(\)|Debug\.disable\(\)') {
+    throw "Aura Routing debug logging must use Debug.setFlag callback, not Debug.enable()/disable()."
 }
 
 $RequiredLoaderTokens = @(

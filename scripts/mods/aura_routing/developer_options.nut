@@ -20,14 +20,12 @@ if (!("DeveloperOptions" in ::AuraRouting))
 
 	function configureDebugLogging()
 	{
-		if (this.isEnabled())
+		local enabled = ::AuraRouting.Mod.ModSettings.getSetting("DebugLogging").getValue();
+		::AuraRouting.Mod.Debug.setFlag("default", enabled);
+
+		if (enabled)
 		{
-			::AuraRouting.Mod.Debug.enable();
-			::AuraRouting.Mod.Debug.printLog("[AuraRouting][Developer] developer options enabled");
-		}
-		else
-		{
-			::AuraRouting.Mod.Debug.disable();
+			::AuraRouting.Mod.Debug.printLog("[AuraRouting] debug logging enabled");
 		}
 	}
 

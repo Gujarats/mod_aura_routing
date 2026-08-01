@@ -41,7 +41,7 @@ When Legends is installed, Aura Routing is added permanently to each eligible ch
 
 ## Developer Options
 
-Aura Routing includes disabled-by-default developer options for faster in-game testing. When enabled in Mod Settings, they can grant test resources and grant Aura Routing to roster characters as their UI data is converted. Use these only on disposable test saves.
+Aura Routing includes disabled-by-default developer options for faster in-game testing. When enabled in Mod Settings, they can grant test resources and grant Aura Routing to roster characters as their UI data is converted. Debug logging is a separate developer option and can be toggled without enabling test grants. Use developer mutation helpers only on disposable test saves.
 
 See `docs/developer_options.md` for the exact setting IDs and runtime behavior.
 

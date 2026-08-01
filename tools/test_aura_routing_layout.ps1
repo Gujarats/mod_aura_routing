@@ -74,18 +74,24 @@ Require-Token 'scripts/skills/effects/aura_routing_evasion_effect.nut' @(
     'PulseMinAlpha = 90',
     'PulseMaxAlpha = 255',
     'PulseTickMs = 60',
+    '::AuraRouting.FallbackEyesPulseToken <- 0',
+    '::AuraRouting.FallbackEyesPulseToken = ::AuraRouting.FallbackEyesPulseToken + 1;',
+    '::AuraRouting.fallbackEyesPulseTick <- function( _ctx )',
     'function showFallbackEyes()',
     'function hideFallbackEyes()',
     'function startFallbackEyesPulse()',
     'function stopFallbackEyesPulse()',
-    'function fallbackEyesPulseTick( _ctx )',
     'this.doesBrushExist("zombie_rage_eyes")',
     'actor.hasSprite("permanent_injury_4")',
+    'actor.getSkills().getSkillByID("effects.aura_routing_evasion")',
     'sprite.setBrush("zombie_rage_eyes");',
     'sprite.fadeIn(1500);',
     'sprite.fadeOutAndHide(1500);',
     'sprite.Alpha = alpha.tointeger();',
-    '::Time.scheduleEvent(::TimeUnit.Real, this.m.PulseTickMs, this.fallbackEyesPulseTick.bindenv(this), _ctx);',
+    'Actor = actor',
+    'Token = this.m.PulseToken',
+    '::Time.scheduleEvent(::TimeUnit.Real, effect.m.PulseTickMs, ::AuraRouting.fallbackEyesPulseTick, _ctx);',
+    '::Time.scheduleEvent(::TimeUnit.Real, this.m.PulseTickMs, ::AuraRouting.fallbackEyesPulseTick, ctx);',
     'Aura Fallback Eyes: applying zombie_rage_eyes',
     'Aura Fallback Eyes: pulse started',
     'Aura Fallback Eyes: pulse stopped',
@@ -152,7 +158,8 @@ Forbid-Token 'scripts/skills/actives/aura_routing_skill.nut' @(
 Forbid-Token 'scripts/skills/effects/aura_routing_evasion_effect.nut' @(
     'actor.setSpriteOffset("miniboss"',
     'glow.setBrush("aura_body_glow_v2");',
-    'function pulseTick('
+    'function pulseTick(',
+    'this.fallbackEyesPulseTick.bindenv(this)'
 )
 
 Require-Token 'README.md' @(

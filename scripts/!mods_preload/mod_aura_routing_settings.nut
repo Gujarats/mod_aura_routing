@@ -36,6 +36,18 @@
 	fallback.addRangeSetting("TwoAffectedMeleeDefense", 10, 0, 100, 1, "Two Effect Melee Defense", "Melee Defense gained until next turn if Aura Routing affects two enemies.");
 	fallback.addRangeSetting("TwoAffectedRangedDefense", 5, 0, 100, 1, "Two Effect Ranged Defense", "Ranged Defense gained until next turn if Aura Routing affects two enemies.");
 
+	local debugLogging = developer.addBooleanSetting(
+		"DebugLogging",
+		false,
+		"Debug Logging",
+		"Write Aura Routing debug lines to log.html."
+	);
+
+	debugLogging.addCallback(function( _data = null )
+	{
+		::AuraRouting.DeveloperOptions.configureDebugLogging();
+	});
+
 	developer.addBooleanSetting(
 		"EnableDeveloperOptions",
 		false,

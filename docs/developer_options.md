@@ -5,6 +5,7 @@ Developer options are opt-in test helpers for faster in-game validation of Aura 
 ## Settings
 
 - `EnableDeveloperOptions`: master switch. When disabled, no developer action runs.
+- `DebugLogging`: when enabled, Aura Routing writes debug lines to `log.html`. This can be changed from Mod Settings during a session.
 - `DeveloperGrantAuraOnLoad`: when enabled, roster characters receive the Aura Routing perk skill when their UI data is converted.
 - `DeveloperGrantResourcesOnLoad`: when enabled, the current roster receives test XP and perk points, and the company receives crowns and supplies once per game session.
 
