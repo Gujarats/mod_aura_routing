@@ -6,6 +6,13 @@ $Loader = Get-Content (Join-Path $Root "scripts/!mods_preload/mod_aura_routing_l
 $Js = Get-Content (Join-Path $Root "ui/mods/aura_routing.js") -Raw
 $Readme = Get-Content (Join-Path $Root "README.md") -Raw
 $Guide = Get-Content (Join-Path $Root "docs/legends_perk_system_compatibility.md") -Raw
+$LegendsPatchPath = Join-Path $Root "scripts/mods/aura_routing/compatibility/legends_perk_tree_patch.nut"
+
+if (!(Test-Path $LegendsPatchPath)) {
+    throw "Missing Legends compatibility module: scripts/mods/aura_routing/compatibility/legends_perk_tree_patch.nut"
+}
+
+$LegendsPatch = Get-Content $LegendsPatchPath -Raw
 
 function Assert-ContainsLiteral($Haystack, $Needle, $Message) {
     if (!$Haystack.Contains($Needle)) {
@@ -21,8 +28,11 @@ foreach ($Needle in @(
 }
 
 foreach ($Needle in @(
-    'queue(">mod_msu", ">mod_legends", ">mod_necro"',
-    'function registerAuraRoutingPerkDefForLegends()',
+    '::AuraRouting.Compatibility.Legends',
+    'function registerHooks( _mod )',
+    'function registerPerkDef()',
+    'function getAuraRoutingPerkDefNumber()',
+    'function addAuraToBackground( _background )',
     '::Const.Perks.addPerkDefObjects',
     '::Legends.Perk.AuraRouting',
     '::Const.Perks.PerkDefs.AuraRouting',
@@ -30,12 +40,20 @@ foreach ($Needle in @(
     'PerkDescription.AuraRouting',
     'scripts/skills/backgrounds/character_background',
     'q.buildPerkTree',
-    'this.addPerk(auraRoutingLegendsPerkDef',
-    'this.getPerk("perk.aura_routing")',
-    '::Hooks.hasMod("mod_legends")',
+    '_background.addPerk(',
+    '_background.getPerk("perk.aura_routing")',
+    '::Hooks.hasMod("mod_legends")'
+)) {
+    Assert-ContainsLiteral $LegendsPatch $Needle "Missing Legends compatibility module token: "
+}
+
+foreach ($Needle in @(
+    'queue(">mod_msu", ">mod_legends", ">mod_necro"',
+    '::include("scripts/mods/aura_routing/compatibility/legends_perk_tree_patch");',
+    '::AuraRouting.Compatibility.Legends.registerHooks(mod);',
     'return result;'
 )) {
-    Assert-ContainsLiteral $Loader $Needle "Missing Legends compatibility loader token: "
+    Assert-ContainsLiteral $Loader $Needle "Missing Legends compatibility loader orchestration token: "
 }
 
 if ($Loader -match 'HookMod\.require\("mod_legends') {

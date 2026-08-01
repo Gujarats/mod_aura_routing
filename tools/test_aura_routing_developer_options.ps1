@@ -5,6 +5,13 @@ $Settings = Get-Content (Join-Path $Root "scripts/!mods_preload/mod_aura_routing
 $Loader = Get-Content (Join-Path $Root "scripts/!mods_preload/mod_aura_routing_loader.nut") -Raw
 $Readme = Get-Content (Join-Path $Root "README.md") -Raw
 $Docs = Get-Content (Join-Path $Root "docs/developer_options.md") -Raw
+$DeveloperOptionsPath = Join-Path $Root "scripts/mods/aura_routing/developer_options.nut"
+
+if (!(Test-Path $DeveloperOptionsPath)) {
+    throw "Missing developer options module: scripts/mods/aura_routing/developer_options.nut"
+}
+
+$DeveloperOptions = Get-Content $DeveloperOptionsPath -Raw
 
 function Assert-ContainsLiteral($Haystack, $Needle, $Message) {
     if (!$Haystack.Contains($Needle)) {
@@ -30,19 +37,32 @@ foreach ($Pattern in $RequiredSettingPatterns) {
     Assert-Matches $Settings $Pattern "Missing developer setting pattern: "
 }
 
-$RequiredLoaderTokens = @(
+$RequiredDeveloperModuleTokens = @(
+    '::AuraRouting.DeveloperOptions',
     '::AuraRouting.DeveloperSession',
-    'function isAuraRoutingDeveloperOptionsEnabled()',
-    'function applyAuraRoutingDeveloperResourcesOnce()',
-    'function findAuraRoutingLegendsPerkDefNumber()',
-    'function grantAuraRoutingForDeveloperTest(',
+    'function init()',
+    'function isEnabled()',
+    'function configureDebugLogging()',
+    'function applyResourcesOnce()',
+    'function grantAuraForTest( _entity )',
     'DeveloperGrantAuraOnLoad',
     'DeveloperGrantResourcesOnLoad',
     'background.addPerk('
 )
 
+foreach ($Needle in $RequiredDeveloperModuleTokens) {
+    Assert-ContainsLiteral $DeveloperOptions $Needle "Missing developer module token: "
+}
+
+$RequiredLoaderTokens = @(
+    '::include("scripts/mods/aura_routing/developer_options");',
+    '::AuraRouting.DeveloperOptions.init();',
+    '::AuraRouting.DeveloperOptions.applyResourcesOnce();',
+    '::AuraRouting.DeveloperOptions.grantAuraForTest(_entity);'
+)
+
 foreach ($Needle in $RequiredLoaderTokens) {
-    Assert-ContainsLiteral $Loader $Needle "Missing developer loader token: "
+    Assert-ContainsLiteral $Loader $Needle "Missing developer loader orchestration token: "
 }
 
 if ($Loader -match 'addSQKeybind|addJSKeybind') {
