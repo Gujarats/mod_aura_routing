@@ -65,6 +65,7 @@ Launch the game and look for Aura Supreme Mod inside your Mod Settings panel!
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 # Known Issue
+ - Using Mod Legends the perk is not always gurantee to be in row/tier 5 as default value, it can be on the next tier. this is the behavior from mod-legends
  - start the hit animation somehow cannot be trigger without attack/damaged, need to find a way to tigger damange animation with 0 damage
  - overlay icon somehow does not look as good as the vanilla
  - The morale preview formula mirrors Battle Brothers 1.5.2.3 data_001 scripts/entity/tactical/actor.nut checkMorale(). If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.
