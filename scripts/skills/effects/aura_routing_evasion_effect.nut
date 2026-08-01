@@ -1,40 +1,3 @@
-if (!("AuraRouting" in ::))
-{
-	::AuraRouting <- {};
-}
-
-if (!("FallbackEyesPulseToken" in ::AuraRouting))
-{
-	::AuraRouting.FallbackEyesPulseToken <- 0;
-}
-
-::AuraRouting.fallbackEyesPulseTick <- function( _ctx )
-{
-	if (_ctx == null || !("Actor" in _ctx) || !("Token" in _ctx)) return;
-
-	local actor = _ctx.Actor;
-	if (actor == null) return;
-	if (actor.isNull() || !actor.isAlive() || !actor.hasSprite("permanent_injury_4")) return;
-
-	local effect = actor.getSkills().getSkillByID("effects.aura_routing_evasion");
-	if (effect == null) return;
-	if (effect.m.PulseToken != _ctx.Token) return;
-	if (!effect.m.IsFallbackEyesVisible) return;
-
-	local sprite = actor.getSprite("permanent_injury_4");
-	if (!sprite.Visible) return;
-
-	local elapsed = ::Time.getRealTime() * 1000.0 - effect.m.PulseStartMs;
-	local cycles = elapsed / effect.m.PulsePeriodMs.tofloat();
-	local phase = cycles - ::Math.floor(cycles);
-	local tri = phase < 0.5 ? phase * 2.0 : (1.0 - phase) * 2.0;
-	local smooth = tri * tri * (3.0 - 2.0 * tri);
-	local alpha = effect.m.PulseMinAlpha + (effect.m.PulseMaxAlpha - effect.m.PulseMinAlpha) * smooth;
-	sprite.Alpha = alpha.tointeger();
-
-	::Time.scheduleEvent(::TimeUnit.Real, effect.m.PulseTickMs, ::AuraRouting.fallbackEyesPulseTick, _ctx);
-}
-
 this.aura_routing_evasion_effect <- this.inherit("scripts/skills/skill", {
 	m = {
 		MeleeDefenseBonus = 0,
@@ -112,25 +75,44 @@ this.aura_routing_evasion_effect <- this.inherit("scripts/skills/skill", {
 		this.startFallbackEyesPulse();
 	}
 
+	function fallbackEyesPulseTick( _ctx )
+	{
+		if (this.m.PulseToken != _ctx.token) return;
+		if (!this.m.IsFallbackEyesVisible) return;
+		if (this.getContainer() == null) return;
+
+		local actor = this.getContainer().getActor();
+		if (actor == null || !actor.isAlive() || !actor.hasSprite("permanent_injury_4")) return;
+
+		local sprite = actor.getSprite("permanent_injury_4");
+		if (!sprite.Visible) return;
+
+		local elapsed = ::Time.getRealTime() * 1000.0 - this.m.PulseStartMs;
+		local cycles = elapsed / this.m.PulsePeriodMs.tofloat();
+		local phase = cycles - ::Math.floor(cycles);
+		local tri = phase < 0.5 ? phase * 2.0 : (1.0 - phase) * 2.0;
+		local smooth = tri * tri * (3.0 - 2.0 * tri);
+		local alpha = this.m.PulseMinAlpha + (this.m.PulseMaxAlpha - this.m.PulseMinAlpha) * smooth;
+		sprite.Alpha = alpha.tointeger();
+
+		::Time.scheduleEvent(::TimeUnit.Real, this.m.PulseTickMs, this.fallbackEyesPulseTick.bindenv(this), _ctx);
+	}
+
 	function startFallbackEyesPulse()
 	{
-		::AuraRouting.FallbackEyesPulseToken = ::AuraRouting.FallbackEyesPulseToken + 1;
-		this.m.PulseToken = ::AuraRouting.FallbackEyesPulseToken;
+		this.m.PulseToken = this.m.PulseToken + 1;
 		this.m.PulseStartMs = ::Time.getRealTime() * 1000.0;
 		::AuraRouting.Mod.Debug.printLog("[AuraRouting] Aura Fallback Eyes: pulse started");
 
-		local actor = this.getContainer().getActor();
 		local ctx = {
-			Actor = actor,
-			Token = this.m.PulseToken
+			token = this.m.PulseToken
 		};
-		::Time.scheduleEvent(::TimeUnit.Real, this.m.PulseTickMs, ::AuraRouting.fallbackEyesPulseTick, ctx);
+		::Time.scheduleEvent(::TimeUnit.Real, this.m.PulseTickMs, this.fallbackEyesPulseTick.bindenv(this), ctx);
 	}
 
 	function stopFallbackEyesPulse()
 	{
-		::AuraRouting.FallbackEyesPulseToken = ::AuraRouting.FallbackEyesPulseToken + 1;
-		this.m.PulseToken = ::AuraRouting.FallbackEyesPulseToken;
+		this.m.PulseToken = this.m.PulseToken + 1;
 		::AuraRouting.Mod.Debug.printLog("[AuraRouting] Aura Fallback Eyes: pulse stopped");
 	}
 
