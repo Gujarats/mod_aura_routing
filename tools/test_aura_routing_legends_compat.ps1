@@ -20,6 +20,23 @@ function Assert-ContainsLiteral($Haystack, $Needle, $Message) {
     }
 }
 
+function Assert-Order($Haystack, $Earlier, $Later, $Message) {
+    $earlierIndex = $Haystack.IndexOf($Earlier)
+    $laterIndex = $Haystack.IndexOf($Later)
+
+    if ($earlierIndex -lt 0) {
+        throw "Missing order token: $Earlier"
+    }
+
+    if ($laterIndex -lt 0) {
+        throw "Missing order token: $Later"
+    }
+
+    if ($earlierIndex -ge $laterIndex) {
+        throw $Message
+    }
+}
+
 foreach ($Needle in @(
     'Const = "AuraRouting"',
     '::Const.Perks.LookupMap[perk.ID] <- perk;'
@@ -55,6 +72,9 @@ foreach ($Needle in @(
 )) {
     Assert-ContainsLiteral $Loader $Needle "Missing Legends compatibility loader orchestration token: "
 }
+
+Assert-Order $Loader '::AuraRouting.DeveloperOptions.grantAuraForTest(_entity);' 'if (::Hooks.hasMod("mod_legends"))' "Legends return must run after developer helpers."
+Assert-Order $Loader 'if (::Hooks.hasMod("mod_legends"))' 'if (_entity != null)' "Legends return must happen before the vanilla UI perk-tree injection branch."
 
 if ($Loader -match 'HookMod\.require\("mod_legends') {
     throw "Aura Routing must not require mod_legends."

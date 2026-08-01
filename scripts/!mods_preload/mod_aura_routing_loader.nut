@@ -31,6 +31,11 @@
 			::AuraRouting.DeveloperOptions.applyResourcesOnce();
 			::AuraRouting.DeveloperOptions.grantAuraForTest(_entity);
 
+			if (::Hooks.hasMod("mod_legends"))
+			{
+				return result;
+			}
+
 			if (_entity != null)
 			{
 				local skills = _entity.getSkills();
@@ -44,11 +49,6 @@
 					local showTree = _entity!=null && !_entity.getSkills().hasSkill("background.hackflows_druid");
 					if (showTree)
 					{
-						if (::Hooks.hasMod("mod_legends"))
-						{
-							return result;
-						}
-
 						local perks = ::Const.Perks.Perks.map(@(row) clone row);
 						// data coming from config/z_aura.nut
 						foreach (perk in ::Const.Perks.Aura) {
