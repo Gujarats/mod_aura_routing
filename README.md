@@ -35,6 +35,16 @@ Through the **Mod Settings** menu, you can dynamically configure the following p
 11. **One Effect Melee/Ranged Defense:** Defense gained until next turn if one enemy is affected.
 12. **Two Effect Melee/Ranged Defense:** Defense gained until next turn if two enemies are affected.
 
+## Legends Compatibility
+
+When Legends is installed, Aura Routing is added permanently to each eligible character's Legends perk tree after `buildPerkTree()` completes. Saves where characters have Aura Routing in their perk tree should continue to be played with `mod_aura_routing` installed because the perk becomes part of Legends' saved background tree data.
+
+## Developer Options
+
+Aura Routing includes disabled-by-default developer options for faster in-game testing. When enabled in Mod Settings, they can grant test resources and grant Aura Routing to roster characters as their UI data is converted. Use these only on disposable test saves.
+
+See `docs/developer_options.md` for the exact setting IDs and runtime behavior.
+
 
 # 🛠️ Requirements
 To run this mod, ensure you have the following frameworks installed in your game data directory:

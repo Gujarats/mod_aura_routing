@@ -9,7 +9,10 @@ CharacterScreenPerksModule.prototype.loadPerkTreesWithBrotherData = function (_b
 	{
 		this.resetPerkTree(this.mPerkTree);
 		this.onPerkTreeLoaded(null, _brother.aura_routing_perkTree);
-		this.mPerkTree.auraRoutingTree = true;
+		if (this.mPerkTree)
+		{
+			this.mPerkTree.auraRoutingTree = true;
+		}
 	}
 	else if (this.mPerkTree && this.mPerkTree.auraRoutingTree)
 	{
