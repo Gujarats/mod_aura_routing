@@ -35,6 +35,7 @@ addPerk({
     Tooltip = "Unlocks the Aura Routing active skill."
     Icon = "aura/aura_routing_perk.png"
     IconDisabled = "aura/aura_routing_perk_sw.png"
+    Const = "AuraRouting"
     // replaced with MSU setting option
     Row = 4
 })

@@ -35,6 +35,16 @@ Through the **Mod Settings** menu, you can dynamically configure the following p
 11. **One Effect Melee/Ranged Defense:** Defense gained until next turn if one enemy is affected.
 12. **Two Effect Melee/Ranged Defense:** Defense gained until next turn if two enemies are affected.
 
+## Legends Compatibility
+
+When Legends is installed, Aura Routing is added permanently to each eligible character's Legends perk tree after `buildPerkTree()` completes. Saves where characters have Aura Routing in their perk tree should continue to be played with `mod_aura_routing` installed because the perk becomes part of Legends' saved background tree data.
+
+## Developer Options
+
+Aura Routing includes disabled-by-default developer options for faster in-game testing. When enabled in Mod Settings, they can grant test resources and grant Aura Routing to roster characters as their UI data is converted. Debug logging is a separate developer option and can be toggled without enabling test grants. Use developer mutation helpers only on disposable test saves.
+
+See `docs/developer_options.md` for the exact setting IDs and runtime behavior.
+
 
 # 🛠️ Requirements
 To run this mod, ensure you have the following frameworks installed in your game data directory:
@@ -58,3 +68,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
  - start the hit animation somehow cannot be trigger without attack/damaged, need to find a way to tigger damange animation with 0 damage
  - overlay icon somehow does not look as good as the vanilla
  - The morale preview formula mirrors Battle Brothers 1.5.2.3 data_001 scripts/entity/tactical/actor.nut checkMorale(). If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.
+ - If a player or modder sees `[AuraRouting] Aura Fallback Eyes: removed` followed by `Script Error: the index 'm' does not exist`, with `fallbackEyesPulseTick -> scripts/skills/effects/aura_routing_evasion_effect.nut : 80` and `_ctx = Table, this = Null`, this is a known fallback-eyes timer callback issue. The current code keeps the original behavior while the callback lifecycle is investigated.

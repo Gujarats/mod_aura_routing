@@ -161,7 +161,10 @@ Require-Token 'README.md' @(
     'No Effect Melee/Ranged Defense',
     'When Aura Routing is selected, hovering a highlighted enemy shows its morale drop chance on hit.',
     'The morale preview formula mirrors Battle Brothers 1.5.2.3 data_001 scripts/entity/tactical/actor.nut checkMorale().',
-    'If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.'
+    'If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.',
+    'fallbackEyesPulseTick -> scripts/skills/effects/aura_routing_evasion_effect.nut : 80',
+    'the index ''m'' does not exist',
+    '_ctx = Table, this = Null'
 )
 
 Write-Host 'Aura Routing layout validation passed.'

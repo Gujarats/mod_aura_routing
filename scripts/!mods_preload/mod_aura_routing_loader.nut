@@ -1,28 +1,41 @@
 ::AuraRouting <- {
 	ID = "mod_aura_routing",
 	Name = "Aura Routing",
-	Version = "0.0.8"
+	Version = "0.1.0"
 };
 
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
 
-::AuraRouting.HookMod.queue(">mod_msu", ">mod_necro", function()
+::include("scripts/mods/aura_routing/developer_options");
+::include("scripts/mods/aura_routing/compatibility/legends_perk_tree_patch");
+
+::AuraRouting.HookMod.queue(">mod_msu", ">mod_legends", ">mod_necro", function()
 {
 	::AuraRouting.Mod <- ::MSU.Class.Mod(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 	::AuraRouting.registerSettings();
-	::AuraRouting.Mod.Debug.disable() // TODO hard coded for now
-	::AuraRouting.Mod.Debug.printLog("[AuraRouting] settings initialized for Aura Routing mod completed");
 
 	local mod = ::AuraRouting.HookMod;
 
- 	::Hooks.registerJS("ui/mods/aura_routing.js");
+	::AuraRouting.DeveloperOptions.init();
+	::AuraRouting.Mod.Debug.printLog("[AuraRouting] settings initialized for Aura Routing mod completed");
+	::AuraRouting.Compatibility.Legends.registerHooks(mod);
+
+	::Hooks.registerJS("ui/mods/aura_routing.js");
 	::Hooks.registerCSS("ui/mods/aura_routing.css");
 	mod.hook("scripts/ui/global/data_helper", function(q)
 	{
 		q.convertEntityToUIData = @(__original) function(_entity, _activeEntity)
 		{
 			local result = __original(_entity, _activeEntity);
+			::AuraRouting.DeveloperOptions.applyResourcesOnce();
+			::AuraRouting.DeveloperOptions.grantAuraForTest(_entity);
+
+			if (::Hooks.hasMod("mod_legends"))
+			{
+				return result;
+			}
+
 			if (_entity != null)
 			{
 				local skills = _entity.getSkills();
