@@ -68,3 +68,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
  - start the hit animation somehow cannot be trigger without attack/damaged, need to find a way to tigger damange animation with 0 damage
  - overlay icon somehow does not look as good as the vanilla
  - The morale preview formula mirrors Battle Brothers 1.5.2.3 data_001 scripts/entity/tactical/actor.nut checkMorale(). If the base game or another mod changes checkMorale(), the preview can become inaccurate and must be updated.
+ - If a player or modder sees `[AuraRouting] Aura Fallback Eyes: removed` followed by `Script Error: the index 'm' does not exist`, with `fallbackEyesPulseTick -> scripts/skills/effects/aura_routing_evasion_effect.nut : 80` and `_ctx = Table, this = Null`, this is a known fallback-eyes timer callback issue. The current code keeps the original behavior while the callback lifecycle is investigated.
