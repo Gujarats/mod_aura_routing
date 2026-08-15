@@ -76,17 +76,9 @@ if (!("Legends" in ::AuraRouting.Compatibility))
 		}
 
 		this.setAuraRoutingPerkDef(null);
-		::Const.Perks.addPerkDefObjects([
-			{
-				ID = "perk.aura_routing",
-				Script = "scripts/skills/perks/aura_routing_perk",
-				Name = "Aura Routing",
-				Tooltip = "Unlocks the Aura Routing active skill.",
-				Icon = "aura/aura_routing_perk.png",
-				IconDisabled = "aura/aura_routing_perk_sw.png",
-				Const = "AuraRouting"
-			}
-		]);
+		local perk = ::AuraRouting.getAuraRoutingPerkDefinition();
+		delete perk.Row;
+		::Const.Perks.addPerkDefObjects([perk]);
 
 		this.AuraRoutingPerkDef = ::Legends.Perk.AuraRouting;
 		return this.AuraRoutingPerkDef;

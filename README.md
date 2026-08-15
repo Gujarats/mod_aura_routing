@@ -39,6 +39,10 @@ Through the **Mod Settings** menu, you can dynamically configure the following p
 
 When Legends is installed, Aura Routing is added permanently to each eligible character's Legends perk tree after `buildPerkTree()` completes. Saves where characters have Aura Routing in their perk tree should continue to be played with `mod_aura_routing` installed because the perk becomes part of Legends' saved background tree data.
 
+## Reforged Compatibility
+
+When Reforged is installed, Aura Routing is registered through Dynamic Perks and added to Reforged's universal `pg.rf_always_1` perk group. The configured Perk Level setting selects its row. For existing saves, Aura Routing waits until the player roster is available, then adds the perk to each brother's saved perk tree once. Reforged owns the perk-tree UI in this mode, so Aura Routing does not inject its separate vanilla UI tree.
+
 ## Developer Options
 
 Aura Routing includes disabled-by-default developer options for faster in-game testing. When enabled in Mod Settings, they can grant test resources and grant Aura Routing to roster characters as their UI data is converted. Debug logging is a separate developer option and can be toggled without enabling test grants. Use developer mutation helpers only on disposable test saves.

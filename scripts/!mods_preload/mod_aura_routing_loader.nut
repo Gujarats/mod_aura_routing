@@ -1,16 +1,20 @@
-::AuraRouting <- {
-	ID = "mod_aura_routing",
-	Name = "Aura Routing",
-	Version = "0.1.0"
-};
+if (!("AuraRouting" in getroottable()))
+{
+	::AuraRouting <- {};
+}
+
+::AuraRouting.ID <- "mod_aura_routing";
+::AuraRouting.Name <- "Aura Routing";
+::AuraRouting.Version <- "0.1.0";
 
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
 
 ::include("scripts/mods/aura_routing/developer_options");
 ::include("scripts/mods/aura_routing/compatibility/legends_perk_tree_patch");
+::include("scripts/mods/aura_routing/compatibility/reforged_perk_tree_patch");
 
-::AuraRouting.HookMod.queue(">mod_msu", ">mod_legends", ">mod_necro", function()
+::AuraRouting.HookMod.queue(">mod_msu", ">mod_legends", ">mod_necro", ">mod_reforged", function()
 {
 	::AuraRouting.Mod <- ::MSU.Class.Mod(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 	::AuraRouting.registerSettings();
@@ -19,7 +23,14 @@
 
 	::AuraRouting.DeveloperOptions.init();
 	::AuraRouting.Mod.Debug.printLog("[AuraRouting] settings initialized for Aura Routing mod completed");
-	::AuraRouting.Compatibility.Legends.registerHooks(mod);
+	if (::Hooks.hasMod("mod_reforged"))
+	{
+		::AuraRouting.Mod.Debug.printLog("[AuraRouting] [Reforged] Dynamic Perks compatibility selected");
+	}
+	else
+	{
+		::AuraRouting.Compatibility.Legends.registerHooks(mod);
+	}
 
 	::Hooks.registerJS("ui/mods/aura_routing.js");
 	::Hooks.registerCSS("ui/mods/aura_routing.css");
@@ -31,8 +42,13 @@
 			::AuraRouting.DeveloperOptions.applyResourcesOnce();
 			::AuraRouting.DeveloperOptions.grantAuraForTest(_entity);
 
-			if (::Hooks.hasMod("mod_legends"))
+			if (::Hooks.hasMod("mod_legends") || ::Hooks.hasMod("mod_reforged"))
 			{
+				if (_entity != null && ::Hooks.hasMod("mod_reforged"))
+				{
+					::AuraRouting.Mod.Debug.printLog("[AuraRouting] [Reforged] skipped UI-only Aura Routing injection for " + _entity.getName());
+				}
+
 				return result;
 			}
 
@@ -85,4 +101,19 @@
 			return tooltip;
 		}
 	});
+
+	// for mod Reforged,works for existing saves
+	mod.hook("scripts/states/world_state", function(q)
+	{
+		q.onUpdate = @(__original) function()
+		{
+			__original();
+			::AuraRouting.Compatibility.Reforged.tryMigrateExistingPlayerTrees();
+		}
+	});
 });
+
+::AuraRouting.HookMod.queue(">mod_reforged", function()
+{
+	::AuraRouting.Compatibility.Reforged.register();
+}, ::Hooks.QueueBucket.AfterHooks);

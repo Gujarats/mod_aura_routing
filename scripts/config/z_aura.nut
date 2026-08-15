@@ -14,6 +14,25 @@
 //   That is why you do not see an explicit include("scripts/config/z_aura") in the loader: it has already been executed
 //   during the engine’s automatic scripts/config scan.
 
+if (!("AuraRouting" in getroottable()))
+{
+	::AuraRouting <- {};
+}
+
+::AuraRouting.getAuraRoutingPerkDefinition <- function()
+{
+	return {
+		ID = "perk.aura_routing",
+		Script = "scripts/skills/perks/aura_routing_perk",
+		Name = "Aura Routing",
+		Tooltip = "Unlocks the Aura Routing active skill.",
+		Icon = "aura/aura_routing_perk.png",
+		IconDisabled = "aura/aura_routing_perk_sw.png",
+		Const = "AuraRouting",
+		Row = 4
+	};
+}
+
 ::Const.Perks.Aura <- [];
 
 local function addPerk(perk) {
@@ -28,14 +47,4 @@ local function addPerk(perk) {
     ::Const.Perks.LookupMap[perk.ID] <- perk;
 }
 
-addPerk({
-    ID = "perk.aura_routing"
-    Script = "scripts/skills/perks/aura_routing_perk"
-    Name = "Aura Routing"
-    Tooltip = "Unlocks the Aura Routing active skill."
-    Icon = "aura/aura_routing_perk.png"
-    IconDisabled = "aura/aura_routing_perk_sw.png"
-    Const = "AuraRouting"
-    // replaced with MSU setting option
-    Row = 4
-})
+addPerk(::AuraRouting.getAuraRoutingPerkDefinition());
