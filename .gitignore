@@ -7,3 +7,7 @@ __pycache__
 .superpowers
 dist
 release
+docs/
+tests/
+tools/
+*.json
