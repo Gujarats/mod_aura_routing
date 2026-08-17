@@ -37,7 +37,7 @@
 
 	local debugLogging = general.addBooleanSetting(
 		"DebugLogging",
-		true,
+		false,
 		"Debug Logging",
 		"Write Aura Routing debug lines to log.html."
 	);

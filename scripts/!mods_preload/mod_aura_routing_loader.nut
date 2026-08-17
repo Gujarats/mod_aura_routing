@@ -5,7 +5,7 @@ if (!("AuraRouting" in getroottable()))
 
 ::AuraRouting.ID <- "mod_aura_routing";
 ::AuraRouting.Name <- "Aura Routing";
-::AuraRouting.Version <- "0.2.0";
+::AuraRouting.Version <- "0.2.1";
 
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
