@@ -10,7 +10,18 @@ if (!("AuraRouting" in getroottable()))
 ::AuraRouting.HookMod <- ::Hooks.register(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 ::AuraRouting.HookMod.require("mod_msu >= 1.9.0");
 
-::include("scripts/mods/aura_routing/developer_options");
+::AuraRouting.configureDebugLogging <- function()
+{
+	if ("GuzBluezDebugLogController" in getroottable()
+		&& "registerTarget" in ::GuzBluezDebugLogController)
+	{
+		::GuzBluezDebugLogController.registerTarget(::AuraRouting.ID, ::AuraRouting.Mod);
+		return;
+	}
+
+	::AuraRouting.Mod.Debug.setFlag("default", ::AuraRouting.Mod.ModSettings.getSetting("DebugLogging").getValue());
+};
+
 ::include("scripts/mods/aura_routing/compatibility/legends_perk_tree_patch");
 ::include("scripts/mods/aura_routing/compatibility/reforged_perk_tree_patch");
 
@@ -18,10 +29,10 @@ if (!("AuraRouting" in getroottable()))
 {
 	::AuraRouting.Mod <- ::MSU.Class.Mod(::AuraRouting.ID, ::AuraRouting.Version, ::AuraRouting.Name);
 	::AuraRouting.registerSettings();
+	::AuraRouting.configureDebugLogging();
 
 	local mod = ::AuraRouting.HookMod;
 
-	::AuraRouting.DeveloperOptions.init();
 	::AuraRouting.Mod.Debug.printLog("[AuraRouting] settings initialized for Aura Routing mod completed");
 	if (::Hooks.hasMod("mod_reforged"))
 	{
@@ -39,9 +50,6 @@ if (!("AuraRouting" in getroottable()))
 		q.convertEntityToUIData = @(__original) function(_entity, _activeEntity)
 		{
 			local result = __original(_entity, _activeEntity);
-			::AuraRouting.DeveloperOptions.applyResourcesOnce();
-			::AuraRouting.DeveloperOptions.grantAuraForTest(_entity);
-
 			if (::Hooks.hasMod("mod_legends") || ::Hooks.hasMod("mod_reforged"))
 			{
 				if (_entity != null && ::Hooks.hasMod("mod_reforged"))

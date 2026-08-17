@@ -43,11 +43,9 @@ When Legends is installed, Aura Routing is added permanently to each eligible ch
 
 When Reforged is installed, Aura Routing is registered through Dynamic Perks and added to Reforged's universal `pg.rf_always_1` perk group. The configured Perk Level setting selects its row. For existing saves, Aura Routing waits until the player roster is available, then adds the perk to each brother's saved perk tree once. Reforged owns the perk-tree UI in this mode, so Aura Routing does not inject its separate vanilla UI tree.
 
-## Developer Options
+## Debug Logging
 
-Aura Routing includes disabled-by-default developer options for faster in-game testing. When enabled in Mod Settings, they can grant test resources and grant Aura Routing to roster characters as their UI data is converted. Debug logging is a separate developer option and can be toggled without enabling test grants. Use developer mutation helpers only on disposable test saves.
-
-See `docs/developer_options.md` for the exact setting IDs and runtime behavior.
+`Debug Logging` on the General page controls Aura Routing output when Global Developer Test is absent. When it is installed, its master log setting overrides this local value. Developer test grants are available only through Global Developer Test.
 
 
 # 🛠️ Requirements
