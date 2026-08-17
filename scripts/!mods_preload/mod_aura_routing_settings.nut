@@ -4,7 +4,6 @@
 	local attack = ::AuraRouting.Mod.ModSettings.addPage("Attack");
 	local morale = ::AuraRouting.Mod.ModSettings.addPage("Morale");
 	local fallback = ::AuraRouting.Mod.ModSettings.addPage("Fallback Defense");
-	local developer = ::AuraRouting.Mod.ModSettings.addPage("Developer Options");
 
 	general.addRangeSetting("UsesPerBattle",
 		2, 1, 3, 1,
@@ -36,7 +35,7 @@
 	fallback.addRangeSetting("TwoAffectedMeleeDefense", 10, 0, 100, 1, "Two Effect Melee Defense", "Melee Defense gained until next turn if Aura Routing affects two enemies.");
 	fallback.addRangeSetting("TwoAffectedRangedDefense", 5, 0, 100, 1, "Two Effect Ranged Defense", "Ranged Defense gained until next turn if Aura Routing affects two enemies.");
 
-	local debugLogging = developer.addBooleanSetting(
+	local debugLogging = general.addBooleanSetting(
 		"DebugLogging",
 		false,
 		"Debug Logging",
@@ -45,27 +44,6 @@
 
 	debugLogging.addCallback(function( _data = null )
 	{
-		::AuraRouting.DeveloperOptions.configureDebugLogging();
+		::AuraRouting.configureDebugLogging();
 	});
-
-	developer.addBooleanSetting(
-		"EnableDeveloperOptions",
-		false,
-		"Enable Developer Options",
-		"Enables Aura Routing developer helpers for disposable test saves."
-	);
-
-	developer.addBooleanSetting(
-		"DeveloperGrantAuraOnLoad",
-		false,
-		"Grant Aura For Testing",
-		"When developer options are enabled, grant Aura Routing to roster characters as their UI data is converted."
-	);
-
-	developer.addBooleanSetting(
-		"DeveloperGrantResourcesOnLoad",
-		false,
-		"Grant Test Resources",
-		"When developer options are enabled, grant test crowns, supplies, XP, and perk points once per game session."
-	);
 }
